@@ -1,0 +1,33 @@
+{
+  "name": "bdn_crawler",
+  "version": "1.0.0",
+  "description": "crawl news data from baidu",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app/index.js",
+    "test": "node app/demo.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/soonfy/soonfy_bdnCrawler.git"
+  },
+  "keywords": [
+    "baiduNews",
+    "crawler",
+    "baidu"
+  ],
+  "author": "soonfy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/soonfy/soonfy_bdnCrawler/issues"
+  },
+  "homepage": "https://github.com/soonfy/soonfy_bdnCrawler#readme",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "iconv-lite": "^0.4.13",
+    "moment": "^2.15.2",
+    "mongoose": "^4.6.5",
+    "request": "^2.75.0",
+    "request-promise": "^4.1.1"
+  }
+}

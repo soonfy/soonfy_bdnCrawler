@@ -1,0 +1,10 @@
+/node_modules/
+/models/
+/controllers/
+/app/demo.js
+/index.js
+/init.js
+/demo.js
+/config.js
+/paramsParser.js
+/tsconfig.json
