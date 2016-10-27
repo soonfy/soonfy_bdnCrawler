@@ -6,7 +6,7 @@
   2. init  
   npm test  ||  node app/init.js  
 
-  3. login and crawl
+  3. login and crawl  
   node app/login.js  
 
   4. deploy  
