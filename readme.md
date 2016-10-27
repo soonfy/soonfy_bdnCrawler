@@ -1,4 +1,4 @@
-# gsdata_crawler
+# baidunews_crawler
 
   1. start  
   npm start  ||  node app/index.js  
