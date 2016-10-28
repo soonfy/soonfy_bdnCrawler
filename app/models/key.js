@@ -7,6 +7,10 @@ const KeySchema = new Schema({
         index: true,
         unique: true
     },
+    tn: {
+        type: String,
+        default: 'newsdy'
+    },
     q1: {
         type: String,
         default: ''
@@ -27,8 +31,11 @@ const KeySchema = new Schema({
         type: Number,
         default: 2
     },
-    isCrawled: Number,
-    updateAt: Date,
+    isCrawled: {
+        type: Number,
+        default: 0
+    },
+    updatedAt: Date,
     createdAt: Date
 });
 const KeyModel = mongoose.model('keys', KeySchema);

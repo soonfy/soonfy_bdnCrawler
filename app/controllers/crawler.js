@@ -7,95 +7,83 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-const rp = require('request-promise');
-const cheerio = require('cheerio');
+const moment = require('moment');
 const config_js_1 = require('../config.js');
-const getData = function (param, time = 1) {
+const news_js_1 = require('../models/news.js');
+const key_js_1 = require('../models/key.js');
+const parser_js_1 = require('./parser.js');
+const paramsParser_js_1 = require('./paramsParser.js');
+const keyer_js_1 = require('./keyer.js');
+let crawlAndInsert = function (params) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            if (time > 10) {
-                return {};
+            let { _id, param } = params;
+            let $ = yield parser_js_1.Parser.getData(param);
+            let results = parser_js_1.Parser.dataParser($);
+            let promises = results.map(result => {
+                result.createdAt = new Date();
+                result._id = [_id, result.url].join('#@#');
+                return config_js_1.Config.dbInsert(news_js_1.News, result);
+            });
+            yield Promise.all(promises);
+            let next = parser_js_1.Parser.pageParser($);
+            if (next) {
+                console.log(next);
+                yield main(next);
             }
-            let url = config_js_1.Config.host + param;
-            console.log(url);
-            let options = {
-                url: url,
-                timeout: config_js_1.Config.timeout,
-                transform: function (body) {
-                    return cheerio.load(body);
-                }
-            };
-            let $ = yield rp(options);
-            return $;
+            else {
+                console.log(_id, 'parse over.');
+            }
         }
         catch (error) {
             console.log(error);
-            console.log(param, '第', time, '次采集出错。');
-            console.log('休息', time, 's重新开始。');
-            yield config_js_1.Config.timestop(time++);
-            yield getData(param, time++);
         }
     });
 };
-const dataParser = function ($, time) {
-    try {
-        let divs = $('div.result');
-        let len = divs.length;
-        console.log('本页总共', len, '条数据。');
-        let results = [];
-        divs.map((ind, div) => {
-            let title = $(div).children('h3').text();
-            let info = $(div).find('p.c-author').text() || '';
-            info = info.trim().replace(/[年|月]/g, '-').replace(/日/g, '');
-            let infos = info.split(/\s+/);
-            let author = infos.shift();
-            let publishedAt = new Date(infos.join(' '));
-            let summary = $(div).find('div.c-summary').text();
-            let url = $(div).children('h3').children('a').attr('href');
-            results.push({
-                title: title,
-                author: author,
-                publishedAt: publishedAt,
-                summary: summary,
-                url: url
-            });
-        });
-        let count = results.length;
-        console.log('总共采集到', count, '条数据。');
-        if (len !== count) {
-            throw new Error('结果采集数量不正确。');
-        }
-        return results;
-    }
-    catch (error) {
-        console.log(error);
-        console.log('第', time, '次采集出错。');
-        console.log('休息', time, 's重新开始。');
-        dataParser($, time++);
-    }
-};
-const pageParser = function ($, time) {
-    try {
-        let pages = $('#page').find('a.n');
-        let next;
-        pages.map((ind, page) => {
-            if ($(page).text().includes('下一页')) {
-                next = $(page).attr('href');
-                return;
+let start = function () {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let keyer = yield keyer_js_1.Keyer.getKey();
+            if (keyer) {
+                let params = paramsParser_js_1.ParamsParser.parse(keyer);
+                let urls = [];
+                for (let key in params) {
+                    urls.push([key, params[key]].join('='));
+                }
+                let param = urls.join('&');
+                param = ['/ns', param].join('?');
+                let _id = keyer.key._id;
+                yield crawlAndInsert({ _id: _id, param: param });
+                yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 0, updatedAt: new Date() }, {});
+                console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
+                console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
+                console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
+                console.log('开始下一次采集...');
+                yield start();
             }
-        });
-        return next;
-    }
-    catch (error) {
-        console.log(error);
-        console.log('第', time, '次采集出错。');
-        console.log('休息', time, 's重新开始。');
-        dataParser($, time++);
-    }
+            else {
+                console.log('==============stop===============');
+                console.log('==============stop===============');
+                console.log('==============stop===============');
+                console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
+                console.log('所有关键词都已更新，10分钟后重新开始更新....');
+                yield config_js_1.Config.timestop(60 * 10);
+                yield start();
+            }
+        }
+        catch (error) {
+            yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 0, updatedAt: new Date() }, {});
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log(error);
+            console.log('出错，休息10秒再来吧');
+            yield config_js_1.Config.timestop(10);
+            yield start();
+        }
+    });
 };
-const crawler = {
-    getData: getData,
-    dataParser: dataParser,
-    pageParser: pageParser
+let crawler = {
+    start: start
 };
 exports.Crawler = crawler;

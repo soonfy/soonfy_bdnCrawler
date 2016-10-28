@@ -47,7 +47,9 @@ const paramsParser = {
         }
     },
     parse: function (params) {
-        let { q1, q3, q4, q6, begin_date, end_date, from, cl, submit, tn, s, mt, lm, ct, ct1, rn } = params;
+        let { key, date } = params;
+        let { q1, q3, q4, q6, from, cl, submit, tn, s, mt, lm, ct, ct1, rn } = key;
+        let { begin_date, end_date } = date;
         if (!q1 && !q3) {
             console.error("请填写关键词！");
             return;
