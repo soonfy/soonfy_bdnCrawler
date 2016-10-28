@@ -72,7 +72,7 @@ let start = function () {
             }
         }
         catch (error) {
-            yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 0, updatedAt: new Date() }, {});
+            yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 2, updatedAt: new Date() }, {});
             console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
             console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
             console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
