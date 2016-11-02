@@ -48,8 +48,14 @@ const dataParser = function ($, time) {
             let info = $(div).find('.c-author').text().trim() || $(div).find('.c-title-author').text().trim() || '';
             info = info.trim().replace(/[年|月]/g, '-').replace(/日/g, '');
             let infos = info.split(/\s+/);
-            let author = infos.shift() || '';
             console.log(infos);
+            let author;
+            if (!infos[0].match(/\d{4}\-\d{2}\-\d{2}/)) {
+                author = infos.shift();
+            }
+            else {
+                author = '';
+            }
             let publishedAt = new Date([infos[0], infos[1]].join(' ')) || new Date();
             let summary = $(div).find('.c-summary').text().trim() || $(div).find('.c-title-author').text().trim() || '';
             let url = $(div).children('h3').children('a').attr('href').trim() || '';
