@@ -37,5 +37,6 @@ const KeySchema = new Schema({
     updatedAt: Date,
     createdAt: Date
 });
-const KeyModel = mongoose.model('keys', KeySchema);
+KeySchema.index({ _id: 1, isCrawled: 1 });
+const KeyModel = mongoose.model('baidunews_keywords', KeySchema);
 exports.Key = KeyModel;

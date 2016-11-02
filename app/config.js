@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const config = {
-    dbUrl: 'mongodb://localhost/bdNews',
+    dbUrl: 'mongodb://normal:Joke123@ant09.idatage.com:27021/tarantula',
     host: 'http://news.baidu.com',
     headers: {
         'Host': 'news.baidu.com',

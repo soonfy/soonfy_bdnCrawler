@@ -15,5 +15,5 @@ const NewsSchema = new Schema({
     publishedAt: Date,
     createdAt: Date
 });
-const NewsModel = mongoose.model('news', NewsSchema);
+const NewsModel = mongoose.model('baidunews_news', NewsSchema);
 exports.News = NewsModel;
