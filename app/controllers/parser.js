@@ -17,6 +17,7 @@ const getData = function (param, time = 1) {
                 return {};
             }
             let url = config_js_1.Config.host + param;
+            console.log('now is parse', url);
             let options = {
                 url: url,
                 timeout: config_js_1.Config.timeout,
@@ -43,14 +44,15 @@ const dataParser = function ($, time) {
         console.log('本页总共', len, '条数据。');
         let results = [];
         divs.map((ind, div) => {
-            let title = $(div).children('h3').text();
-            let info = $(div).find('p.c-author').text() || '';
+            let title = $(div).children('h3').text().trim();
+            let info = $(div).find('.c-author').text().trim() || $(div).find('.c-title-author').text().trim() || '';
             info = info.trim().replace(/[年|月]/g, '-').replace(/日/g, '');
             let infos = info.split(/\s+/);
-            let author = infos.shift();
-            let publishedAt = new Date(infos.join(' '));
-            let summary = $(div).find('div.c-summary').text();
-            let url = $(div).children('h3').children('a').attr('href');
+            let author = infos.shift() || '';
+            console.log(infos);
+            let publishedAt = new Date([infos[0], infos[1]].join(' ')) || new Date();
+            let summary = $(div).find('.c-summary').text().trim() || $(div).find('.c-title-author').text().trim() || '';
+            let url = $(div).children('h3').children('a').attr('href').trim() || '';
             results.push({
                 title: title,
                 author: author,

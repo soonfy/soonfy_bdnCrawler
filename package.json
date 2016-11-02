@@ -1,7 +1,7 @@
 {
-  "name": "bdn_crawler",
-  "version": "1.0.0",
-  "description": "crawl news data from baidu",
+  "name": "baidu_news_crawler",
+  "version": "0.0.1",
+  "description": "crawl news data from baidu news",
   "main": "index.js",
   "scripts": {
     "start": "node app/index.js",

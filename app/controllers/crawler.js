@@ -22,6 +22,7 @@ let crawlAndInsert = function (params) {
             let results = parser_js_1.Parser.dataParser($);
             let promises = results.map(result => {
                 result.createdAt = new Date();
+                result.keyId = _id;
                 result._id = [_id, result.url].join('#@#');
                 return config_js_1.Config.dbInsert(news_js_1.News, result);
             });
@@ -29,10 +30,11 @@ let crawlAndInsert = function (params) {
             let next = parser_js_1.Parser.pageParser($);
             if (next) {
                 console.log(next);
-                yield main(next);
+                let param = next;
+                yield crawlAndInsert({ _id: _id, param: param });
             }
             else {
-                console.log(_id, 'parse over.');
+                console.log(_id, param, 'parse over.');
             }
         }
         catch (error) {
@@ -53,8 +55,9 @@ let start = function () {
                 let param = urls.join('&');
                 param = ['/ns', param].join('?');
                 let _id = keyer.key._id;
+                let dated = keyer.date.end_date;
                 yield crawlAndInsert({ _id: _id, param: param });
-                yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 0, updatedAt: new Date() }, {});
+                yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 0, updatedAt: new Date(dated) }, {});
                 console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
                 console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
                 console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
@@ -72,7 +75,7 @@ let start = function () {
             }
         }
         catch (error) {
-            yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 2, updatedAt: new Date() }, {});
+            yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 2, updatedAt: new Date(dated) }, {});
             console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
             console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
             console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');

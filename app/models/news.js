@@ -7,11 +7,12 @@ const NewsSchema = new Schema({
         index: true,
         unique: true
     },
+    keyId: String,
     url: String,
     title: String,
     author: String,
-    publishedAt: String,
     summary: String,
+    publishedAt: Date,
     createdAt: Date
 });
 const NewsModel = mongoose.model('news', NewsSchema);

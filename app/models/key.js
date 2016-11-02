@@ -2,10 +2,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const KeySchema = new Schema({
-    _id: {
+    key: {
         type: String,
-        index: true,
-        unique: true
+        index: true
     },
     tn: {
         type: String,
