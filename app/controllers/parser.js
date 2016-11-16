@@ -37,6 +37,21 @@ const getData = function (param, time = 1) {
         }
     });
 };
+const countParser = function ($, time) {
+    try {
+        let div = $('.nums').first();
+        let str = div.text();
+        let count = str.replace(/\D/g, '');
+        count = parseInt(count);
+        return count;
+    }
+    catch (error) {
+        console.log(error);
+        console.log('第', time, '次采集出错。');
+        console.log('休息', time, 's重新开始。');
+        countParser($, time++);
+    }
+};
 const dataParser = function ($, time) {
     try {
         let divs = $('div.result');
@@ -102,6 +117,7 @@ const pageParser = function ($, time) {
 };
 const parser = {
     getData: getData,
+    countParser: countParser,
     dataParser: dataParser,
     pageParser: pageParser
 };

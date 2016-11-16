@@ -11,6 +11,7 @@ const moment = require('moment');
 const config_js_1 = require('../config.js');
 const news_js_1 = require('../models/news.js');
 const key_js_1 = require('../models/key.js');
+const count_js_1 = require('../models/count.js');
 const parser_js_1 = require('./parser.js');
 const paramsParser_js_1 = require('./paramsParser.js');
 const keyer_js_1 = require('./keyer.js');
@@ -20,6 +21,20 @@ let crawlAndInsert = function (params) {
             let { _id, param } = params;
             let $ = yield parser_js_1.Parser.getData(param);
             let results = parser_js_1.Parser.dataParser($);
+            let count = parser_js_1.Parser.countParser($);
+            if (param.includes('begin_date=')) {
+                let date = param.split('begin_date=')[1].slice(0, 10);
+                let publishedAt = new Date(date) || new Date;
+                console.log('新闻显示总量', count);
+                let _count = {
+                    _id: [_id, date].join('#@#'),
+                    keyId: _id,
+                    publishedAt: publishedAt,
+                    count: count,
+                    createdAt: new Date
+                };
+                yield config_js_1.Config.dbInsert(count_js_1.Count, _count);
+            }
             let promises = results.map(result => {
                 result.createdAt = new Date();
                 result.keyId = _id;

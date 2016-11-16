@@ -16,18 +16,18 @@ let main = function () {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             console.log('keyer init...');
-            let res = yield key_js_1.Key.update({ isCrawled: 1 }, { isCrawled: 0 }, { multi: true });
-            console.log('==================================keyer init success=====================');
-            console.log('==================================keyer init success=====================');
-            console.log('==================================keyer init success=====================');
+            let res = yield key_js_1.Key.update({ isCrawled: 3 }, { isCrawled: 0 }, { multi: true });
+            console.log('==================================keyer modify success=====================');
+            console.log('==================================keyer modify success=====================');
+            console.log('==================================keyer modify success=====================');
             console.log(res);
             yield mongoose.disconnect();
         }
         catch (error) {
             console.log(error);
-            console.log('==================================keyer init error=====================');
-            console.log('==================================keyer init error=====================');
-            console.log('==================================keyer init error=====================');
+            console.log('==================================keyer modify error=====================');
+            console.log('==================================keyer modify error=====================');
+            console.log('==================================keyer modify error=====================');
             yield main();
         }
     });

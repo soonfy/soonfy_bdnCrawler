@@ -5,3 +5,6 @@
   
   2. init  
   npm test  ||  node app/init.js  
+
+  3. modify  
+  node app/modify.js  
