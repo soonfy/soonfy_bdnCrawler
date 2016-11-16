@@ -41,8 +41,8 @@ const countParser = function ($, time) {
     try {
         let div = $('.nums').first();
         let str = div.text();
+        console.log(str);
         let count = str.replace(/\D/g, '');
-        console.log(count);
         count = parseInt(count);
         if (count !== count) {
             return countParser($, time++);
