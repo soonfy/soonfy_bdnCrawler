@@ -99,7 +99,7 @@ const paramsParser = {
             let estd = (this.dataCompare('1970-01-01', end_date));
             et = estd - 28800 + 86399;
         }
-        let all_params = { from: from, cl: cl, bt: bt, y0: y0, m0: m0, d0: d0, y1: y1, m1: m1, d1: d1, et: et, q1: q1, submit: submit, q3: q3, q4: q4, mt: mt, lm: lm, s: s, begin_date: begin_date, end_date: end_date, tn: tn, ct: ct, ct1: ct1, rn: rn, q6: q6 };
+        let all_params = { from, cl, bt, y0, m0, d0, y1, m1, d1, et, q1, submit, q3, q4, mt, lm, s, begin_date, end_date, tn, ct, ct1, rn, q6 };
         return all_params;
     }
 };

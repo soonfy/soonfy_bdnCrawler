@@ -29,8 +29,8 @@ let crawlAndInsert = function (params) {
                 let _count = {
                     _id: [_id, date].join('#@#'),
                     keyId: _id,
-                    publishedAt: publishedAt,
-                    count: count,
+                    publishedAt,
+                    count,
                     createdAt: new Date
                 };
                 yield config_js_1.Config.dbInsert(count_js_1.Count, _count);
@@ -46,7 +46,7 @@ let crawlAndInsert = function (params) {
             if (next) {
                 console.log(next);
                 let param = next;
-                yield crawlAndInsert({ _id: _id, param: param });
+                yield crawlAndInsert({ _id, param });
             }
             else {
                 console.log(_id, param, 'parse over.');
@@ -71,7 +71,7 @@ let start = function () {
                 param = ['/ns', param].join('?');
                 let _id = keyer.key._id;
                 let dated = keyer.date.end_date;
-                yield crawlAndInsert({ _id: _id, param: param });
+                yield crawlAndInsert({ _id, param });
                 yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 0, updatedAt: new Date(dated) }, {});
                 console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
                 console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
@@ -102,6 +102,6 @@ let start = function () {
     });
 };
 let crawler = {
-    start: start
+    start
 };
 exports.Crawler = crawler;

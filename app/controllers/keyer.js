@@ -18,10 +18,10 @@ let getKey = function () {
                 let begin_date = moment(moment(key.updatedAt).add(1, 'days')).format('YYYY-MM-DD');
                 let end_date = moment(moment(key.updatedAt).add(1, 'days')).format('YYYY-MM-DD');
                 let date = {
-                    begin_date: begin_date,
-                    end_date: end_date
+                    begin_date,
+                    end_date
                 };
-                return { key: key, date: date };
+                return { key, date };
             }
             else {
                 return;
@@ -33,6 +33,6 @@ let getKey = function () {
     });
 };
 let keyer = {
-    getKey: getKey
+    getKey
 };
 exports.Keyer = keyer;

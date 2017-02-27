@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "noImplicitAny": false,
+    "rootDir": ".",
+    "sourceMap": false,
+    "moduleResolution": "node",
+    "removeComments": true,
+    "experimentalDecorators": true,
+    "declaration": false,
+    "inlineSourceMap": false,
+    "outDir": "./app",
+    "allowJs": true,
+    "jsx": "preserve"
+  },
+  "exclude": [
+    "node_modules",
+    "app",
+    "*.json",
+    "*.md"
+  ]
+}

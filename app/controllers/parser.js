@@ -19,7 +19,7 @@ const getData = function (param, time = 1) {
             let url = config_js_1.Config.host + param;
             console.log('now is parse', url);
             let options = {
-                url: url,
+                url,
                 timeout: config_js_1.Config.timeout,
                 transform: function (body) {
                     return cheerio.load(body);
@@ -79,11 +79,11 @@ const dataParser = function ($, time) {
             let summary = $(div).find('.c-summary').text().trim() || $(div).find('.c-title-author').text().trim() || '';
             let url = $(div).children('h3').children('a').attr('href').trim() || '';
             results.push({
-                title: title,
-                author: author,
-                publishedAt: publishedAt,
-                summary: summary,
-                url: url
+                title,
+                author,
+                publishedAt,
+                summary,
+                url
             });
         });
         let count = results.length;
@@ -120,9 +120,9 @@ const pageParser = function ($, time) {
     }
 };
 const parser = {
-    getData: getData,
-    countParser: countParser,
-    dataParser: dataParser,
-    pageParser: pageParser
+    getData,
+    countParser,
+    dataParser,
+    pageParser
 };
 exports.Parser = parser;

@@ -1,11 +1,2 @@
 /node_modules/
-/models/
-/controllers/
-/app/demo.js
-/index.js
-/init.js
-/modify.js
-/demo.js
-/config.js
-/tsconfig.json
 /npm-debug.log
