@@ -2,19 +2,19 @@
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
 const moment = require('moment');
-const config_js_1 = require('../config.js');
-const news_js_1 = require('../models/news.js');
-const key_js_1 = require('../models/key.js');
-const count_js_1 = require('../models/count.js');
-const parser_js_1 = require('./parser.js');
-const paramsParser_js_1 = require('./paramsParser.js');
-const keyer_js_1 = require('./keyer.js');
+const config_js_1 = require("../config.js");
+const news_js_1 = require("../models/news.js");
+const key_js_1 = require("../models/key.js");
+const count_js_1 = require("../models/count.js");
+const parser_js_1 = require("./parser.js");
+const paramsParser_js_1 = require("./paramsParser.js");
+const keyer_js_1 = require("./keyer.js");
 let crawlAndInsert = function (params) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

@@ -2,14 +2,14 @@
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
 const rp = require('request-promise');
 const cheerio = require('cheerio');
-const config_js_1 = require('../config.js');
+const config_js_1 = require("../config.js");
 const getData = function (param, time = 1) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -21,6 +21,10 @@ const getData = function (param, time = 1) {
             let options = {
                 url,
                 timeout: config_js_1.Config.timeout,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+                    'Cookie': 'BDUSS=kp1VFA2QU5Hc0VqaEFRQjRuRmo0c1FIdGQ5SXlacEwxcnNCSVJPVUZhLXNvSzlZSVFBQUFBJCQAAAAAAAAAAAEAAACcBEoURGVpdHlfeGlhb2RpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKwTiFisE4hYb; BAIDUID=FDFF3008D9037881CFE34DB9F189A185:FG=1; MCITY=-131%3A; BIDUPSID=FDFF3008D9037881CFE34DB9F189A185; PSTM=1490167033; BDRCVFR[iL4hrzJ0zlT]=mbxnW11j9Dfmh7GuZR8mvqV; BD_CK_SAM=1; PSINO=2; BDSVRTM=505; H_PS_PSSID='
+                },
                 transform: function (body) {
                     return cheerio.load(body);
                 }
@@ -41,7 +45,6 @@ const countParser = function ($, time) {
     try {
         let div = $('.nums').first();
         let str = div.text();
-        console.log(str);
         let count = str.replace(/\D/g, '');
         count = parseInt(count);
         if (count !== count) {
@@ -67,7 +70,6 @@ const dataParser = function ($, time) {
             let info = $(div).find('.c-author').text().trim() || $(div).find('.c-title-author').text().trim() || '';
             info = info.trim().replace(/[年|月]/g, '-').replace(/日/g, '');
             let infos = info.split(/\s+/);
-            console.log(infos);
             let author;
             if (!infos[0].match(/\d{4}\-\d{2}\-\d{2}/)) {
                 author = infos.shift();
@@ -75,6 +77,7 @@ const dataParser = function ($, time) {
             else {
                 author = '';
             }
+            let time = [infos[0], infos[1]].join(' ');
             let publishedAt = new Date([infos[0], infos[1]].join(' ')) || new Date();
             let summary = $(div).find('.c-summary').text().trim() || $(div).find('.c-title-author').text().trim() || '';
             let url = $(div).children('h3').children('a').attr('href').trim() || '';
@@ -83,7 +86,8 @@ const dataParser = function ($, time) {
                 author,
                 publishedAt,
                 summary,
-                url
+                url,
+                time
             });
         });
         let count = results.length;
