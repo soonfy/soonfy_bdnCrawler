@@ -5,6 +5,6 @@ import {Crawler} from './controllers/crawler.js';
 
 mongoose.connect(Config.dbUrl);
 mongoose.Promise = global.Promise;
-// mongoose.set('debug', true);
+mongoose.set('debug', true);
 
 Crawler.start();

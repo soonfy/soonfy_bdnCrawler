@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const countSchema = new Schema({
-  _id: {        //关键词_id+时间publishedAt
+  _id: {        //时间date+关键词_id
     type: String,
-    index: true,
     unique: true
   },
   keyId: String,  //关键词_id
+  date: String,
   count: Number,
   publishedAt: Date,  //新闻发布时间
   createdAt: Date

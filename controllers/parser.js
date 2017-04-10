@@ -1,5 +1,6 @@
 const rp = require('request-promise');
 const cheerio = require('cheerio');
+const moment = require('moment');
 
 import {Config} from '../config.js';
 
@@ -21,10 +22,7 @@ const getData = async function (param, time = 1) {
     let options = {
       url,
       timeout: Config.timeout,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-        'Cookie': 'BDUSS=kp1VFA2QU5Hc0VqaEFRQjRuRmo0c1FIdGQ5SXlacEwxcnNCSVJPVUZhLXNvSzlZSVFBQUFBJCQAAAAAAAAAAAEAAACcBEoURGVpdHlfeGlhb2RpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKwTiFisE4hYb; BAIDUID=FDFF3008D9037881CFE34DB9F189A185:FG=1; MCITY=-131%3A; BIDUPSID=FDFF3008D9037881CFE34DB9F189A185; PSTM=1490167033; BDRCVFR[iL4hrzJ0zlT]=mbxnW11j9Dfmh7GuZR8mvqV; BD_CK_SAM=1; PSINO=2; BDSVRTM=505; H_PS_PSSID='
-      },
+      headers: Config.headers,
       transform: function (body) {
         return cheerio.load(body);
       }
@@ -38,7 +36,7 @@ const getData = async function (param, time = 1) {
     console.log(param, '第', time, '次采集出错。');
     console.log('休息', time, 's重新开始。');
     await Config.timestop(time++);
-    await getData(param, time++);
+    return await getData(param, time++);
   }
 };
 
@@ -63,7 +61,7 @@ const countParser = function ($, time) {
     console.log(error);
     console.log('第', time, '次采集出错。');
     console.log('休息', time, 's重新开始。');
-    countParser($, time++);
+    return countParser($, time++);
   }
 }
 
@@ -92,7 +90,12 @@ const dataParser = function ($, time) {
         author = ''
       }
       let time = [infos[0], infos[1]].join(' ');
-      let publishedAt = new Date([infos[0], infos[1]].join(' ')) || new Date();
+      let publishedAt = Config.parseTime(time) || new Date([infos[0], infos[1]].join(' ')) || new Date();
+      let date = moment(publishedAt).format('YYYY-MM-DD');
+      // 移除来源网站，时间，百度快照
+      $(div).find('.c-author').text('');
+      $(div).find('.c-title-author').text('');
+      $(div).find('.c-info').text('');
       let summary = $(div).find('.c-summary').text().trim() || $(div).find('.c-title-author').text().trim() || '';
       let url = $(div).children('h3').children('a').attr('href').trim() || '';
       results.push({
@@ -101,7 +104,8 @@ const dataParser = function ($, time) {
         publishedAt,
         summary,
         url,
-        time
+        time,
+        date
       })
     })
     let count = results.length;
@@ -114,9 +118,27 @@ const dataParser = function ($, time) {
     console.log(error);
     console.log('第', time, '次采集出错。');
     console.log('休息', time, 's重新开始。');
-    dataParser($, time++);
+    return dataParser($, time++);
   }
 };
+
+const moreParser = ($, time) => {
+  try {
+    let aes = $('.c-more_link');
+    let pages = [];
+    aes.map((ind, a) => {
+      if($(a).attr('href')){
+        pages.push($(a).attr('href'));
+      }
+    })
+    return pages;
+  } catch (error) {
+    console.log(error);
+    console.log('第', time, '次采集出错。');
+    console.log('休息', time, 's重新开始。');
+    return moreParser($, time++);
+  }
+}
 
 /**
  * parse next page from getData()
@@ -140,7 +162,7 @@ const pageParser = function ($, time) {
     console.log(error);
     console.log('第', time, '次采集出错。');
     console.log('休息', time, 's重新开始。');
-    dataParser($, time++);
+    return dataParser($, time++);
   }
 };
 
@@ -148,7 +170,8 @@ const parser = {
   getData,
   countParser,
   dataParser,
-  pageParser
+  pageParser,
+  moreParser
 }
 
 export {parser as Parser};

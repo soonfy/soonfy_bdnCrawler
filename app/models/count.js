@@ -4,10 +4,10 @@ const Schema = mongoose.Schema;
 const countSchema = new Schema({
     _id: {
         type: String,
-        index: true,
         unique: true
     },
     keyId: String,
+    date: String,
     count: Number,
     publishedAt: Date,
     createdAt: Date

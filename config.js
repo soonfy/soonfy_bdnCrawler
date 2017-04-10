@@ -7,30 +7,51 @@ const config = {
   headers: {
     'Host': 'news.baidu.com',
     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36',
-    'Cookie': 'LOCALGX=%u5317%u4EAC%7C%30%7C%u5317%u4EAC%7C%30; BAIDUID=E18B383EFDD1CF72238B3DD26C9E268E:FG=1; PSTM=1477364316; BIDUPSID=C0E93A264CABA0EA0EBABF90F5FC5BA9; Hm_lvt_e9e114d958ea263de46e080563e254c4=1477299022,1477357796,1477371390; BDRCVFR[iL4hrzJ0zlT]=mbxnW11j9Dfmh7GuZR8mvqV; BD_CK_SAM=1; PSINO=6; BDSVRTM=258; H_PS_PSSID=',
+    'Cookie': 'BDUSS=kp1VFA2QU5Hc0VqaEFRQjRuRmo0c1FIdGQ5SXlacEwxcnNCSVJPVUZhLXNvSzlZSVFBQUFBJCQAAAAAAAAAAAEAAACcBEoURGVpdHlfeGlhb2RpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKwTiFisE4hYb; BAIDUID=FDFF3008D9037881CFE34DB9F189A185:FG=1; MCITY=-131%3A; BIDUPSID=FDFF3008D9037881CFE34DB9F189A185; PSTM=1490167033; BDRCVFR[iL4hrzJ0zlT]=mbxnW11j9Dfmh7GuZR8mvqV; BD_CK_SAM=1; PSINO=2; BDSVRTM=505; H_PS_PSSID=',
     // 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
     // 'Accept-Encoding': 'gzip, deflate, sdch',
     // 'Accept-Language': 'zh-CN,zh;q=0.8',
     // 'Referer': 'referer'
   },
   timeout: 1000 * 60 * 2,
-  timestop: async function (s) {
+  async timestop(s) {
     return new Promise((resolve) => {
       setTimeout(resolve, 1000 * s);
     });
   },
-  dbInsert: async function (DB, obj) {
+  async dbInsert(DB, obj) {
     try {
-      let _db = new DB(obj);
-      await _db.save();
+      return await DB.findOneAndUpdate({
+        _id: obj._id
+      }, {
+        $set: obj
+      }, {
+        upsert: true,
+        new: true
+      });
     } catch (error) {
-      if(error.errmsg && error.errmsg.includes('E11000 duplicate key error collection')){
-        //
-      }else{
-        console.log(error);
-      }
+      console.error(`update error.`);
+      console.error(error);
     }
+  },
+  parseTime(str) {
+    let time,
+      match,
+      hour = /(\d+)小时前/g,
+      minute = /(\d+)分钟前/g;
+    if (match = hour.exec(str)) {
+      time = Date.now() - match[1] * 1000 * 60 * 60;
+      time = new Date(time);
+    } else if (match = minute.exec(str)) {
+      time = Date.now() - match[1] * 1000 * 60;
+      time = new Date(time);
+    } else {
+      // console.log(str);
+    }
+    return time;
   }
 };
 
-export {config as Config};
+export {
+  config as Config
+};

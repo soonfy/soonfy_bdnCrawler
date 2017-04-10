@@ -20,28 +20,21 @@ let crawlAndInsert = function (params) {
         try {
             let { _id, param } = params;
             let $ = yield parser_js_1.Parser.getData(param);
-            let results = parser_js_1.Parser.dataParser($);
             let count = parser_js_1.Parser.countParser($);
-            if (param.includes('begin_date=')) {
-                let date = param.split('begin_date=')[1].slice(0, 10);
-                let publishedAt = new Date(date) || new Date;
-                console.log('新闻显示总量', count);
-                let _count = {
-                    _id: [_id, date].join('#@#'),
-                    keyId: _id,
-                    publishedAt,
-                    count,
-                    createdAt: new Date
-                };
-                yield config_js_1.Config.dbInsert(count_js_1.Count, _count);
-            }
+            let pages = parser_js_1.Parser.moreParser($);
+            let results = parser_js_1.Parser.dataParser($);
             let promises = results.map(result => {
                 result.createdAt = new Date();
                 result.keyId = _id;
-                result._id = [_id, result.url].join('#@#');
+                result._id = [result.date, _id, result.url].join('#@#');
                 return config_js_1.Config.dbInsert(news_js_1.News, result);
             });
             yield Promise.all(promises);
+            console.log(pages);
+            for (let page of pages) {
+                let param = page;
+                yield crawlAndInsert({ _id, param });
+            }
             let next = parser_js_1.Parser.pageParser($);
             if (next) {
                 console.log(next);
@@ -73,6 +66,22 @@ let start = function () {
                 let dated = keyer.date.end_date;
                 yield crawlAndInsert({ _id, param });
                 yield key_js_1.Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 0, updatedAt: new Date(dated) }, {});
+                console.log(keyer.date);
+                let dates = yield news_js_1.News.distinct('date', { publishedAt: { $gte: new Date(keyer.date.begin_date), $lte: new Date(keyer.date.end_date) } });
+                console.log(dates);
+                let promises = dates.map((date) => __awaiter(this, void 0, void 0, function* () {
+                    let agg = yield news_js_1.News.count({ keyId: _id, date: date });
+                    let _count = {
+                        _id: [date, _id].join('#@#'),
+                        keyId: '' + _id,
+                        date: date,
+                        count: agg,
+                        publishedAt: new Date(date),
+                        createdAt: new Date
+                    };
+                    return yield config_js_1.Config.dbInsert(count_js_1.Count, _count);
+                }));
+                yield Promise.all(promises);
                 console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
                 console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
                 console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');

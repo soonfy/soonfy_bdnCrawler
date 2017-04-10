@@ -13,6 +13,7 @@ const NewsSchema = new Schema({
     author: String,
     summary: String,
     publishedAt: Date,
+    date: String,
     createdAt: Date
 });
 const NewsModel = mongoose.model('baidunews_news', NewsSchema);
