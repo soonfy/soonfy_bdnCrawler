@@ -1,14 +1,28 @@
 const moment = require('moment');
 
-import {Config} from '../config.js';
+import {
+  Config
+} from '../config.js';
 
-import {News} from '../models/news.js';
-import {Key} from '../models/key.js';
-import {Count} from '../models/count.js';
+import {
+  News
+} from '../models/news.js';
+import {
+  Key
+} from '../models/key.js';
+import {
+  Count
+} from '../models/count.js';
 
-import {Parser} from './parser.js';
-import {ParamsParser} from './paramsParser.js';
-import {Keyer} from './keyer.js';
+import {
+  Parser
+} from './parser.js';
+import {
+  ParamsParser
+} from './paramsParser.js';
+import {
+  Keyer
+} from './keyer.js';
 
 
 /**
@@ -17,9 +31,13 @@ import {Keyer} from './keyer.js';
  * @param {any} params - contains _id and url param
  * @return 
  */
-let crawlAndInsert = async function (params) {
+let crawlAndInsert = async function (params, options) {
   try {
-    let {_id, param} = params
+    let {
+      _id,
+      param
+    } = params;
+    let {key} = options;
     let $ = await Parser.getData(param);
     let count = Parser.countParser($);
     let pages = Parser.moreParser($);
@@ -27,6 +45,7 @@ let crawlAndInsert = async function (params) {
     let promises = results.map(result => {
       result.createdAt = new Date();
       result.keyId = _id;
+      result.key = key;
       result._id = [result.date, _id, result.url].join('#@#');
       return Config.dbInsert(News, result);
     })
@@ -35,14 +54,20 @@ let crawlAndInsert = async function (params) {
     console.log(pages);
     for (let page of pages) {
       let param = page;
-      await crawlAndInsert({_id, param});
+      await crawlAndInsert({
+        _id,
+        param
+      }, options);
     }
     // 下一页
     let next = Parser.pageParser($);
     if (next) {
       console.log(next);
       let param = next;
-      await crawlAndInsert({_id, param});
+      await crawlAndInsert({
+        _id,
+        param
+      }, options);
     } else {
       console.log(_id, param, 'parse over.');
     }
@@ -70,13 +95,33 @@ let start = async function () {
       param = ['/ns', param].join('?');
       let _id = keyer.key._id
       let dated = keyer.date.end_date
-      await crawlAndInsert({ _id, param });
-      await Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 0, updatedAt: new Date(dated) }, {});
+      let options = {
+        key: keyer.key.key
+      }
+      await crawlAndInsert({
+        _id,
+        param
+      }, options);
+      await Key.findOneAndUpdate({
+        _id: _id,
+        isCrawled: 1
+      }, {
+        isCrawled: 0,
+        updatedAt: new Date(dated)
+      }, {});
       console.log(keyer.date);
-      let dates = await News.distinct('date', { publishedAt: {$gte: new Date(keyer.date.begin_date), $lte: new Date(keyer.date.end_date)}});
+      let dates = await News.distinct('date', {
+        publishedAt: {
+          $gte: new Date(keyer.date.begin_date),
+          $lte: new Date(keyer.date.end_date)
+        }
+      });
       console.log(dates);
-      let promises = dates.map(async (date) => {
-        let agg = await News.count({ keyId: _id, date: date });
+      let promises = dates.map(async(date) => {
+        let agg = await News.count({
+          keyId: _id,
+          date: date
+        });
         let _count = {
           _id: [date, _id].join('#@#'),
           keyId: '' + _id,
@@ -104,7 +149,13 @@ let start = async function () {
       await start();
     }
   } catch (error) {
-    await Key.findOneAndUpdate({ _id: _id, isCrawled: 1 }, { isCrawled: 2, updatedAt: new Date(dated) }, {});
+    await Key.findOneAndUpdate({
+      _id: _id,
+      isCrawled: 1
+    }, {
+      isCrawled: 2,
+      updatedAt: new Date(dated)
+    }, {});
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
@@ -119,4 +170,6 @@ let crawler = {
   start
 }
 
-export {crawler as Crawler};
+export {
+  crawler as Crawler
+};

@@ -8,6 +8,7 @@ const NewsSchema = new Schema({
     unique: true
   },
   keyId: String,  //关键词_id
+  key: String,
   url: String,
   title: String,
   author: String,
