@@ -97,6 +97,7 @@ const dataParser = function ($, time) {
       $(div).find('.c-title-author').text('');
       $(div).find('.c-info').text('');
       let summary = $(div).find('.c-summary').text().trim() || $(div).find('.c-title-author').text().trim() || '';
+      summary = summary.endsWith('...') ? summary.slice(0, -3) : summary;
       let url = $(div).children('h3').children('a').attr('href').trim() || '';
       results.push({
         title,
