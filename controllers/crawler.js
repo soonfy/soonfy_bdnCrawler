@@ -111,19 +111,41 @@ let start = async function () {
         isCrawled: 0,
         updatedAt: new Date(moment(dated).add(1, 'days'))
       }, {});
-      let agg = await News.count({
-        keyId: _id,
-        date: dated
+      // let agg = await News.count({
+      //   keyId: _id,
+      //   date: dated
+      // });
+      // let _count = {
+      //   _id: [dated, _id].join('#@#'),
+      //   keyId: _id,
+      //   date: dated,
+      //   count: agg,
+      //   publishedAt: new Date(dated),
+      //   createdAt: new Date
+      // };
+      // await Config.dbInsert(Count, _count);
+      let dates = await News.distinct('date', {
+        publishedAt: {
+          $gte: new Date(keyer.date.begin_date),
+          $lte: new Date(keyer.date.end_date)
+        }
       });
-      let _count = {
-        _id: [dated, _id].join('#@#'),
-        keyId: _id,
-        date: dated,
-        count: agg,
-        publishedAt: new Date(dated),
-        createdAt: new Date
-      };
-      await Config.dbInsert(Count, _count);
+      let promises = dates.map(async(date) => {
+        let agg = await News.count({
+          keyId: _id,
+          date: date
+        });
+        let _count = {
+          _id: [date, _id].join('#@#'),
+          keyId: '' + _id,
+          count: agg,
+          date: date,
+          publishedAt: new Date(date),
+          createdAt: new Date
+        };
+        return await Config.dbInsert(Count, _count);
+      })
+      await Promise.all(promises);
 
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');

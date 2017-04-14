@@ -14,10 +14,10 @@ let getKey = async function () {
     let key = await Key.findOneAndUpdate({updatedAt: {$lt: last}, isCrawled: 0 }, { isCrawled: 1 }, {sort: {updatedAt: 1}});
     if (key) {
       // 每天采集一次
-      let begin_date = moment(key.updatedAt).format('YYYY-MM-DD');
+      // let begin_date = moment(key.updatedAt).format('YYYY-MM-DD');
+      // let end_date = moment(key.updatedAt).format('YYYY-MM-DD');
+      let begin_date = moment(moment(key.updatedAt).subtract(3, 'days')).format('YYYY-MM-DD');
       let end_date = moment(key.updatedAt).format('YYYY-MM-DD');
-      // let begin_date = moment(moment(key.updatedAt).subtract(3, 'days')).format('YYYY-MM-DD');
-      // let end_date = moment().format('YYYY-MM-DD');
       let date= {
         begin_date,
         end_date
