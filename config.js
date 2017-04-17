@@ -6,13 +6,6 @@ const elasticsearch = require('elasticsearch');
 const config = {
   dbUrl: process.argv[2] || '',
   esUrl: process.argv[3] || '',
-  // client: () => {
-  //   new elasticsearch.Client({
-  //     hosts: [
-  //       this.esUrl
-  //     ]
-  //   })
-  // },
   host: 'http://news.baidu.com',
   headers: {
     'Host': 'news.baidu.com',

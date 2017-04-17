@@ -19,21 +19,4 @@ console.log('mongodb url', Config.dbUrl);
 mongoose.Promise = global.Promise;
 // mongoose.set('debug', true);
 
-// Crawler.start();
-let id = 'soonfy'
-let body = {
-  keyId: 'soonfy-keyId',
-  url: 'soonfy-url',
-  title: 'soonfy-title',
-  author: 'soonfy-author',
-  summary: 'soonfy-summary',
-  publishedAt: new Date(),
-  date: 'soonfy-date',
-  createdAt: new Date()
-}
-let client = new elasticsearch.Client({
-  hosts: [
-    Config.esUrl
-  ]
-});
-Config.esInsert(client, id, body);
+Crawler.start();
