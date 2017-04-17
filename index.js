@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const elasticsearch = require('elasticsearch');
 
 import {
   Config
@@ -9,7 +8,7 @@ import {
 } from './controllers/crawler.js';
 
 console.log(process.argv);
-if (process.argv.length < 4) {
+if (process.argv.length < 3) {
   console.error(`缺少参数。`);
   process.exit();
 }
