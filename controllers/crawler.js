@@ -1,18 +1,18 @@
 const moment = require('moment');
 
+const client = new elasticsearch.Client({
+  hosts: [
+    Config.esUrl
+  ]
+});
+
 import {
   Config
 } from '../config.js';
 
 import {
-  News
-} from '../models/news.js';
-import {
   Key
 } from '../models/key.js';
-import {
-  Count
-} from '../models/count.js';
 
 import {
   Parser
@@ -45,11 +45,11 @@ let crawlAndInsert = async function (params, options) {
     let pages = Parser.moreParser($);
     let results = Parser.dataParser($);
     let promises = results.map(result => {
+      let id = [result.date, _id, result.url].join('#@#')
       result.createdAt = new Date();
       result.keyId = _id;
       result.key = key;
-      result._id = [result.date, _id, result.url].join('#@#');
-      return Config.dbInsert(News, result);
+      return Config.esInsert(client, id, result)
     })
     await Promise.all(promises);
     // 相同新闻
@@ -111,41 +111,6 @@ let start = async function () {
         isCrawled: 0,
         updatedAt: new Date(moment(dated).add(1, 'days'))
       }, {});
-      // let agg = await News.count({
-      //   keyId: _id,
-      //   date: dated
-      // });
-      // let _count = {
-      //   _id: [dated, _id].join('#@#'),
-      //   keyId: _id,
-      //   date: dated,
-      //   count: agg,
-      //   publishedAt: new Date(dated),
-      //   createdAt: new Date
-      // };
-      // await Config.dbInsert(Count, _count);
-      let dates = await News.distinct('date', {
-        publishedAt: {
-          $gte: new Date(keyer.date.begin_date),
-          $lte: new Date(keyer.date.end_date)
-        }
-      });
-      let promises = dates.map(async(date) => {
-        let agg = await News.count({
-          keyId: _id,
-          date: date
-        });
-        let _count = {
-          _id: [date, _id].join('#@#'),
-          keyId: '' + _id,
-          count: agg,
-          date: date,
-          publishedAt: new Date(date),
-          createdAt: new Date
-        };
-        return await Config.dbInsert(Count, _count);
-      })
-      await Promise.all(promises);
 
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
