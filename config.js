@@ -57,11 +57,14 @@ const config = {
         id: id,
         body: body
       })
-      console.log(resp && resp.result);
+      // console.log(resp && resp.result);
       return resp;
     } catch (error) {
       console.error(`es index error.`);
       console.error(error);
+      console.error(`sleep 10s to index.`);
+      await this.timestop(10);
+      return await this.esInsert(client, id, body);
     }
   }
 };

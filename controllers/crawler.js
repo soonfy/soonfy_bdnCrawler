@@ -1,10 +1,5 @@
 const moment = require('moment');
-
-const client = new elasticsearch.Client({
-  hosts: [
-    Config.esUrl
-  ]
-});
+const elasticsearch = require('elasticsearch');
 
 import {
   Config
@@ -23,6 +18,12 @@ import {
 import {
   Keyer
 } from './keyer.js';
+
+const client = new elasticsearch.Client({
+  hosts: [
+    Config.esUrl
+  ]
+});
 
 
 /**
@@ -44,11 +45,14 @@ let crawlAndInsert = async function (params, options) {
     let count = Parser.countParser($);
     let pages = Parser.moreParser($);
     let results = Parser.dataParser($);
+
+    console.log('储存 es 数据数量', results.length);
     let promises = results.map(result => {
-      let id = [result.date, _id, result.url].join('#@#')
+      let id = [_id, result.url].join('').replace(/[^\w\d]/g, '');
       result.createdAt = new Date();
       result.keyId = _id;
-      result.key = key;
+      // console.log(id);
+      // console.log(result);
       return Config.esInsert(client, id, result)
     })
     await Promise.all(promises);
@@ -74,7 +78,7 @@ let crawlAndInsert = async function (params, options) {
       console.log(_id, param, 'parse over.');
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 

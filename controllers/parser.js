@@ -89,8 +89,8 @@ const dataParser = function ($, time) {
       }else{
         author = ''
       }
-      let time = [infos[0], infos[1]].join(' ');
-      let publishedAt = Config.parseTime(time) || new Date([infos[0], infos[1]].join(' ')) || new Date();
+      let times = [infos[0], infos[1]].join(' ');
+      let publishedAt = Config.parseTime(times) || new Date([infos[0], infos[1]].join(' ')) || new Date();
       let date = moment(publishedAt).format('YYYY-MM-DD');
       // 移除来源网站，时间，百度快照
       $(div).find('.c-author').text('');
@@ -105,7 +105,6 @@ const dataParser = function ($, time) {
         publishedAt,
         summary,
         url,
-        time,
         date
       })
     })
