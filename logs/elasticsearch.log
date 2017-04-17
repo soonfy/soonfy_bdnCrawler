@@ -1,0 +1,795 @@
+INFO: 2017-04-17T03:04:59Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:04:59Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/soonfy",
+    "body": {
+      "id": "soonfy",
+      "keyId": "soonfy-keyId",
+      "url": "soonfy-url",
+      "title": "soonfy-title",
+      "author": "soonfy-author",
+      "summary": "soonfy-summary",
+      "publishedAt": "2017-04-17T03:04:59.729Z",
+      "date": "soonfy-date",
+      "createdAt": "2017-04-17T03:04:59.729Z"
+    },
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:05:00Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/soonfy
+  {
+    "id": "soonfy",
+    "keyId": "soonfy-keyId",
+    "url": "soonfy-url",
+    "title": "soonfy-title",
+    "author": "soonfy-author",
+    "summary": "soonfy-summary",
+    "publishedAt": "2017-04-17T03:04:59.729Z",
+    "date": "soonfy-date",
+    "createdAt": "2017-04-17T03:04:59.729Z"
+  }
+  <- 201
+  {
+    "_index": "baidunews_news",
+    "_type": "baidunews_news",
+    "_id": "soonfy",
+    "_version": 1,
+    "result": "created",
+    "_shards": {
+      "total": 2,
+      "successful": 2,
+      "failed": 0
+    },
+    "created": true
+  }
+
+DEBUG: 2017-04-17T03:05:00Z
+  Request complete
+
+INFO: 2017-04-17T03:05:39Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:05:39Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:05:40Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 3,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "soonfy",
+          "_score": 1,
+          "_source": {
+            "id": "soonfy",
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:04:59.729Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:04:59.729Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:05:40Z
+  Request complete
+
+INFO: 2017-04-17T03:06:03Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:06:03Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+DEBUG: 2017-04-17T03:06:03Z
+  starting request {
+    "method": "DELETE",
+    "path": "/baidunews_news/baidunews_news/soonfy",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:06:04Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 56,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "soonfy",
+          "_score": 1,
+          "_source": {
+            "id": "soonfy",
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:04:59.729Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:04:59.729Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:06:04Z
+  Request complete
+
+TRACE: 2017-04-17T03:06:04Z
+  -> DELETE http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/soonfy
+  
+  <- 200
+  {
+    "found": true,
+    "_index": "baidunews_news",
+    "_type": "baidunews_news",
+    "_id": "soonfy",
+    "_version": 2,
+    "result": "deleted",
+    "_shards": {
+      "total": 2,
+      "successful": 2,
+      "failed": 0
+    }
+  }
+
+DEBUG: 2017-04-17T03:06:04Z
+  Request complete
+
+INFO: 2017-04-17T03:06:09Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:06:09Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:06:09Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 5,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "soonfy",
+          "_score": 1,
+          "_source": {
+            "id": "soonfy",
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:04:59.729Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:04:59.729Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:06:09Z
+  Request complete
+
+INFO: 2017-04-17T03:06:22Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:06:22Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:06:22Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 5,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "soonfy",
+          "_score": 1,
+          "_source": {
+            "id": "soonfy",
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:04:59.729Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:04:59.729Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:06:22Z
+  Request complete
+
+INFO: 2017-04-17T03:08:31Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:08:31Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:08:31Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 48,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 0,
+      "max_score": null,
+      "hits": []
+    }
+  }
+
+DEBUG: 2017-04-17T03:08:31Z
+  Request complete
+
+INFO: 2017-04-17T03:15:57Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:15:57Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:15:57Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 4,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "AVt56E-YwN7OoxmoNPr7",
+          "_score": 1,
+          "_source": {
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:15:19.271Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:15:19.271Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:15:57Z
+  Request complete
+
+INFO: 2017-04-17T03:16:28Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:16:28Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+DEBUG: 2017-04-17T03:16:28Z
+  starting request {
+    "method": "DELETE",
+    "path": "/baidunews_news/baidunews_news/AVt56E-YwN7OoxmoNPr7",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:16:28Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 3,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "AVt56E-YwN7OoxmoNPr7",
+          "_score": 1,
+          "_source": {
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:15:19.271Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:15:19.271Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:16:28Z
+  Request complete
+
+TRACE: 2017-04-17T03:16:28Z
+  -> DELETE http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/AVt56E-YwN7OoxmoNPr7
+  
+  <- 200
+  {
+    "found": true,
+    "_index": "baidunews_news",
+    "_type": "baidunews_news",
+    "_id": "AVt56E-YwN7OoxmoNPr7",
+    "_version": 2,
+    "result": "deleted",
+    "_shards": {
+      "total": 2,
+      "successful": 2,
+      "failed": 0
+    }
+  }
+
+DEBUG: 2017-04-17T03:16:28Z
+  Request complete
+
+INFO: 2017-04-17T03:23:02Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:23:02Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:23:02Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 1,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 0,
+      "max_score": null,
+      "hits": []
+    }
+  }
+
+DEBUG: 2017-04-17T03:23:02Z
+  Request complete
+
+INFO: 2017-04-17T03:23:50Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:23:50Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:23:51Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 1,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 0,
+      "max_score": null,
+      "hits": []
+    }
+  }
+
+DEBUG: 2017-04-17T03:23:51Z
+  Request complete
+
+INFO: 2017-04-17T03:24:23Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:24:23Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:24:24Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 3,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 0,
+      "max_score": null,
+      "hits": []
+    }
+  }
+
+DEBUG: 2017-04-17T03:24:24Z
+  Request complete
+
+INFO: 2017-04-17T03:24:51Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:24:51Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:24:52Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 3,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "soonfy",
+          "_score": 1,
+          "_source": {
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:23:38.138Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:23:38.138Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:24:52Z
+  Request complete
+
+INFO: 2017-04-17T03:25:14Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:25:14Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:25:14Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 3,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "soonfy",
+          "_score": 1,
+          "_source": {
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:23:38.138Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:23:38.138Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:25:14Z
+  Request complete
+
+INFO: 2017-04-17T03:25:41Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:25:41Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:25:42Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 2,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "soonfy",
+          "_score": 1,
+          "_source": {
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:25:19.192Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:25:19.192Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:25:42Z
+  Request complete
+
+INFO: 2017-04-17T03:25:46Z
+  Adding connection to http://59.110.52.213/baidunews
+
+DEBUG: 2017-04-17T03:25:46Z
+  starting request {
+    "method": "POST",
+    "path": "/baidunews_news/baidunews_news/_search",
+    "ignore": [
+      404
+    ],
+    "query": {}
+  }
+  
+
+TRACE: 2017-04-17T03:25:46Z
+  -> POST http://59.110.52.213:80/baidunews/baidunews_news/baidunews_news/_search
+  
+  <- 200
+  {
+    "took": 29,
+    "timed_out": false,
+    "_shards": {
+      "total": 15,
+      "successful": 15,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [
+        {
+          "_index": "baidunews_news",
+          "_type": "baidunews_news",
+          "_id": "soonfy",
+          "_score": 1,
+          "_source": {
+            "keyId": "soonfy-keyId",
+            "url": "soonfy-url",
+            "title": "soonfy-title",
+            "author": "soonfy-author",
+            "summary": "soonfy-summary",
+            "publishedAt": "2017-04-17T03:25:19.192Z",
+            "date": "soonfy-date",
+            "createdAt": "2017-04-17T03:25:19.192Z"
+          }
+        }
+      ]
+    }
+  }
+
+DEBUG: 2017-04-17T03:25:46Z
+  Request complete
+

@@ -1,9 +1,18 @@
 /**
  * 配置文件
  */
+const elasticsearch = require('elasticsearch');
 
 const config = {
   dbUrl: process.argv[2] || '',
+  esUrl: process.argv[3] || '',
+  // client: () => {
+  //   new elasticsearch.Client({
+  //     hosts: [
+  //       this.esUrl
+  //     ]
+  //   })
+  // },
   host: 'http://news.baidu.com',
   headers: {
     'Host': 'news.baidu.com',
@@ -46,6 +55,21 @@ const config = {
       // console.log(str);
     }
     return time;
+  },
+  async esInsert(client, id, body) {
+    try {
+      let resp = await client.index({
+        index: 'baidunews_news',
+        type: 'baidunews_news',
+        id: id,
+        body: body
+      })
+      console.log(resp && resp.result);
+      return resp;
+    } catch (error) {
+      console.error(`es index error.`);
+      console.error(error);
+    }
   }
 };
 
