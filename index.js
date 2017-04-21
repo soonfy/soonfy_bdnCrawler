@@ -14,7 +14,11 @@ if (process.argv.length < 4) {
 }
 
 console.log('mongodb url', Config.dbUrl);
-mongoose.connect(Config.dbUrl);
+mongoose.connect(Config.dbUrl, (error) => {
+  if (error) {
+    console.error(error);
+  }
+});
 mongoose.Promise = global.Promise;
 // mongoose.set('debug', true);
 
