@@ -53,7 +53,7 @@ let crawlAndInsert = async function (params, options) {
       result.keyId = _id;
       // console.log(id);
       // console.log(result);
-      return Config.esInsert(client, id, result)
+      // return Config.esInsert(client, id, result)
     })
     await Promise.all(promises);
     // 相同新闻
@@ -92,6 +92,7 @@ let start = async function () {
   try {
     let keyer = await Keyer.getKey();
     if (keyer) {
+      console.log(keyer.date);
       let params = ParamsParser.parse(keyer);
       let urls = [];
       for (let key in params) {

@@ -17,7 +17,7 @@ let getKey = async function () {
       // let begin_date = moment(key.updatedAt).format('YYYY-MM-DD');
       // let end_date = moment(key.updatedAt).format('YYYY-MM-DD');
       let begin_date = moment(moment(key.updatedAt).subtract(3, 'days')).format('YYYY-MM-DD');
-      let end_date = moment(moment(key.updatedAt).add(1, 'days')).format('YYYY-MM-DD');
+      let end_date = moment(moment(key.updatedAt)).format('YYYY-MM-DD');
       let date= {
         begin_date,
         end_date
