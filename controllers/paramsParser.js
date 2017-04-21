@@ -104,10 +104,10 @@ const paramsParser = {
     /**
      * default param
      */
-    // q1 = q1 ? encodeURIComponent(q1) : '';
-    // q3 = q3 ? encodeURIComponent(q3) : '';
-    // q4 = q4 ? encodeURIComponent(q4) : '';
-    // q6 = q6 ? encodeURIComponent(q6) : '';
+    q1 = q1 ? encodeURIComponent(q1) : '';
+    q3 = q3 ? encodeURIComponent(q3) : '';
+    q4 = q4 ? encodeURIComponent(q4) : '';
+    q6 = q6 ? encodeURIComponent(q6) : '';
     from = from ? from : 'news';
     cl = cl ? cl : 2;
     submit = submit ? submit : '%B0%D9%B6%C8%D2%BB%CF%C2';
