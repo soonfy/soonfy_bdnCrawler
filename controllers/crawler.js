@@ -1,5 +1,6 @@
 const moment = require('moment');
-const elasticsearch = require('elasticsearch');
+// const elasticsearch = require('elasticsearch');
+const http = require('http');
 
 import {
   Config
@@ -19,11 +20,11 @@ import {
   Keyer
 } from './keyer.js';
 
-const client = new elasticsearch.Client({
-  hosts: [
-    Config.esUrl
-  ]
-});
+// const client = new elasticsearch.Client({
+//   hosts: [
+//     Config.esUrl
+//   ]
+// });
 
 
 /**
@@ -47,15 +48,38 @@ let crawlAndInsert = async function (params, options) {
     let results = Parser.dataParser($);
 
     console.log('储存 es 数据数量', results.length);
-    let promises = results.map(result => {
-      let id = [_id, result.url].join('').replace(/[^\w\d]/g, '');
-      result.createdAt = new Date();
+    // let promises = results.map(result => {
+    //   let id = [_id, result.url].join('').replace(/[^\w\d]/g, '');
+    //   result.createdAt = new Date();
+    //   result.keyId = _id;
+    //   // console.log(id);
+    //   // console.log(result);
+    //   return Config.esInsert(client, id, result)
+    // })
+    // await Promise.all(promises);
+    results = results.map(result => {
+      result.id = [_id, result.url].join('').replace(/[^\w\d]/g, '');
       result.keyId = _id;
-      // console.log(id);
-      // console.log(result);
-      return Config.esInsert(client, id, result)
+      result.index_name = 'baidunews_news';
+      result.type_name = 'baidunews_news';
+      result.createdAt = new Date();
+      return result
     })
-    await Promise.all(promises);
+    console.log(results);
+    results = JSON.stringify(results);
+    const opts = {
+      hostname: Config.esUrl.trim(),
+      path: '/stq/api/v1/pa/baidu/add',
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        'Content-Length': Buffer.byteLength(results)
+      }
+    };
+    const req = http.request(opts, (res) => {
+      console.log(res.statusCode);
+    });
+    req.write(results);
     // 相同新闻
     console.log(pages);
     for (let page of pages) {

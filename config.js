@@ -1,7 +1,7 @@
 /**
  * 配置文件
  */
-const elasticsearch = require('elasticsearch');
+// const elasticsearch = require('elasticsearch');
 
 const config = {
   dbUrl: process.argv[2] || '',

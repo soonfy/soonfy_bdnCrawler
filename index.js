@@ -11,6 +11,9 @@ console.log(process.argv);
 if (process.argv.length < 4) {
   console.error(`缺少参数。`);
   process.exit();
+} else if (process.argv[3].trim().length < 10) {
+  console.error(`es 地址不正确。`);
+  process.exit();
 }
 
 console.log('mongodb url', Config.dbUrl);

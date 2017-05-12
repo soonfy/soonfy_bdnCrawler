@@ -13,7 +13,7 @@ import * as moment from 'moment';
 const starter = async() => {
   try {
     let filepath = './source/';
-    let file = './source/news.csv';
+    let file = './source/20170427news.csv';
     fs.writeFileSync(file, '项目,新闻标题,新闻链接,新闻来源,新闻摘要,新闻发表时间,新闻采集时间\r\n')
     let lines = fs.readFileSync('./source/dianli.csv', 'utf-8').split('\r');
     console.log(lines);
