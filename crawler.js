@@ -13,13 +13,17 @@ import * as moment from 'moment';
 const starter = async() => {
   try {
     let filepath = './source/';
-    let file = './source/20170427news.csv';
+    let file = './source/news_20170515.csv';
+    let source = './source/source_20170515.csv';
     fs.writeFileSync(file, '项目,新闻标题,新闻链接,新闻来源,新闻摘要,新闻发表时间,新闻采集时间\r\n')
-    let lines = fs.readFileSync('./source/dianli.csv', 'utf-8').split('\r');
+    let lines = fs.readFileSync(source, 'utf-8').split('\r\n');
     console.log(lines);
     lines.shift();
     for (let _line of lines) {
       let infos = _line.split('\t');
+      if (infos.length < 4) {
+        continue
+      }
       infos.filter(x => x && x.trim());
       let keys = infos.slice(3);
       for (let key of keys) {
