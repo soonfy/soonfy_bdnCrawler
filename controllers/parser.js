@@ -2,7 +2,7 @@ const rp = require('request-promise');
 const cheerio = require('cheerio');
 const moment = require('moment');
 
-import {Config} from '../config.js';
+import { Config } from '../config.js';
 
 
 /**
@@ -14,7 +14,7 @@ import {Config} from '../config.js';
  */
 const getData = async function (param, time = 1) {
   try {
-    if(time > 10){
+    if (time > 10) {
       return {};
     }
     let url = Config.host + param;
@@ -47,21 +47,29 @@ const getData = async function (param, time = 1) {
  * @param {any} time
  * @returns
  */
-const countParser = function ($, time) {
+const countParser = async function ($, time = 0) {
   try {
     let div = $('.nums').first();
     let str = div.text();
     let count = str.replace(/\D/g, '');
     count = parseInt(count);
-    if(count !== count){
-      return countParser($, time++);
+    if (time >= 20) {
+      return 0;
+    }
+    if (count !== count) {
+      console.log('--------------------error count---------------------------');
+      console.log(count);
+      console.log('休息', 60, 's重新开始。');
+      await Config.timestop(60);
+      return countParser($, ++time);
     }
     return count;
   } catch (error) {
     console.log(error);
     console.log('第', time, '次采集出错。');
-    console.log('休息', time, 's重新开始。');
-    return countParser($, time++);
+    console.log('休息', 60, 's重新开始。');
+    await Config.timestop(60);
+    return countParser($, time);
   }
 }
 
@@ -84,9 +92,9 @@ const dataParser = function ($, time) {
       info = info.trim().replace(/[年|月]/g, '-').replace(/日/g, '');
       let infos = info.split(/\s+/);
       let author
-      if(!infos[0].match(/\d{4}\-\d{2}\-\d{2}/)){
+      if (!infos[0].match(/\d{4}\-\d{2}\-\d{2}/)) {
         author = infos.shift();
-      }else{
+      } else {
         author = ''
       }
       let times = [infos[0], infos[1]].join(' ');
@@ -110,7 +118,7 @@ const dataParser = function ($, time) {
     })
     let count = results.length;
     console.log('总共采集到', count, '条数据。');
-    if(len !== count){
+    if (len !== count) {
       throw new Error('结果采集数量不正确。');
     }
     return results;
@@ -127,7 +135,7 @@ const moreParser = ($, time) => {
     let aes = $('.c-more_link');
     let pages = [];
     aes.map((ind, a) => {
-      if($(a).attr('href')){
+      if ($(a).attr('href')) {
         pages.push($(a).attr('href'));
       }
     })
@@ -152,7 +160,7 @@ const pageParser = function ($, time) {
     let pages = $('#page').find('a.n');
     let next;
     pages.map((ind, page) => {
-      if($(page).text().includes('下一页')){
+      if ($(page).text().includes('下一页')) {
         next = $(page).attr('href');
         return;
       }
@@ -174,4 +182,4 @@ const parser = {
   moreParser
 }
 
-export {parser as Parser};
+export { parser as Parser };

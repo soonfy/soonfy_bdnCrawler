@@ -43,7 +43,7 @@ let crawlAndInsert = async function (params, options) {
       key
     } = options;
     let $ = await Parser.getData(param);
-    let count = Parser.countParser($);
+    let count = await Parser.countParser($);
     let pages = Parser.moreParser($);
     let results = Parser.dataParser($);
 
