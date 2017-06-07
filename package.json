@@ -27,6 +27,7 @@
     "elasticsearch": "^13.0.0-rc2",
     "filer_sf": "^1.0.2",
     "iconv-lite": "^0.4.13",
+    "lodash": "^4.17.4",
     "moment": "^2.15.2",
     "mongoose": "^4.6.5",
     "request": "^2.75.0",
