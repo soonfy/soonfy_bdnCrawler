@@ -97,6 +97,151 @@ let crawl = async(param) => {
   }
 }
 
+/**
+ *  不包含重大新闻的转发量
+ */
+const repost = async() => {
+  try {
+    let host = Config.host;
+    let filepath = path.join(__dirname, '../source/repost.xlsx');
+    let uripath = path.join(__dirname, '../source/uri.xlsx');
+    let resultpath;
+    let articlepath;
+    let data = filer.read(filepath);
+    let results = [];
+    // console.log(data);
+    let topics = data['监测关键词'];
+    let reposts = data['转载关键词'];
+
+    let uris = filer.read(uripath);
+    uris = uris['官网链接'];
+    uris.shift();
+    let uri_ls = [];
+    uris.map(x => {
+      x[3] ? uri_ls.push(x[3]) : uri_ls.push('');
+    })
+    console.log(uri_ls);
+
+    let head = topics.shift().slice(0, 5);
+    head.push('渠道');
+    head.push('链接');
+    head.push('转载量');
+    console.log(head);
+    results.push(head);
+
+    let index = 0;
+    for (let line of topics) {
+      console.log(line[2]);
+      let keys = line.slice(5);
+      let articles = [],
+        all_articles = [];
+      let sum = 0;
+      let hostname = null;
+      if (uri_ls[index] && uri_ls[index].includes('http')) {
+        hostname = new URL(uri_ls[index]).hostname;
+        let names = hostname.split('.');
+        hostname = names.slice(-2, -1).pop() + '.';
+      }
+      console.log(++index);
+      console.log('hostname', hostname);
+      for (let key of keys) {
+        let q1 = key;
+        let date = '2017-05-01';
+        let k_articles = [];
+        while (date.includes('2017-05')) {
+          console.log(date);
+          let q1 = key;
+          // console.log(q1);
+          let keyer = {
+            key: {
+              q1: q1
+            },
+            date: {
+              begin_date: date,
+              end_date: date
+            }
+          }
+          let params = ParamsParser.parse(keyer);
+          let urls = [];
+          for (let key in params) {
+            urls.push([key, params[key]].join('='))
+          }
+          let param = urls.join('&');
+          param = ['/ns', param].join('?');
+          let uri = host + param;
+          let _articles = await crawl(param);
+
+          // 下一页
+          let $ = await Parser.getData(param);
+          let next = Parser.pageParser($);
+          while (next) {
+            // console.log(next);
+            let param = next;
+            _articles = _.concat(_articles, await crawl(param));
+            let $ = await Parser.getData(param);
+            next = Parser.pageParser($);
+          }
+          let icont = line.slice(0, 3);
+          icont.push(date);
+          icont.push(date);
+          icont.push(q1);
+          icont.push(uri);
+          icont.push(_articles.length);
+          results.push(icont);
+          k_articles = _.concat(k_articles, _articles);
+          _articles = null;
+          date = moment(new Date(date) - 0 + 1000 * 60 * 60 * 24).format('YYYY-MM-DD');
+        }
+        console.log(k_articles.length);
+        all_articles = _.concat(all_articles, k_articles);
+        k_articles = _.uniqBy(k_articles, 'url');
+        if (hostname) {
+          k_articles = k_articles.filter(x => {
+            return !x.url.includes(hostname);
+          })
+        }
+        if (q1.includes('央视网')) {
+          let len = k_articles.length;
+          k_articles = k_articles.slice(0, Math.round(len / 15));
+        }
+        console.log(k_articles.length);
+        articles = _.concat(articles, k_articles);
+      }
+      console.log(articles.length);
+      articles = _.uniqBy(articles, 'url');
+      sum = articles.length;
+      console.log(sum);
+      articlepath = path.join(__dirname, `../source/渠道内容-${index}.xlsx`);
+      filer.write(articlepath, all_articles);
+
+      let cont = line.slice(0, 5);
+      cont.push('新闻总量');
+      cont.push('加和');
+      cont.push(sum);
+      results.push(cont);
+      articles = null;
+      cont = null;
+      sum = null;
+      hostname = null;
+
+      resultpath = path.join(__dirname, `../source/渠道-${index}.xlsx`);
+      filer.write(resultpath, results);
+      process.exit();
+    }
+    console.log(results);
+    resultpath = path.join(__dirname, `../source/渠道.xlsx`);
+    filer.write(resultpath, results);
+    console.log(`all over...`);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+repost();
+
+/**
+ *  包含重大新闻的转发量
+ */
 const newer = async() => {
   try {
     let host = Config.host;
@@ -296,4 +441,4 @@ const newer = async() => {
   }
 }
 
-newer();
+// newer();
