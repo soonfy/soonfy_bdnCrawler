@@ -44,6 +44,10 @@ let crawlAndInsert = async function (params, options) {
     } = options;
     let $ = await Parser.getData(param);
     let count = await Parser.countParser($);
+    while (count === -1) {
+      $ = await Parser.getData(param);
+      count = await Parser.countParser($);
+    }
     let pages = Parser.moreParser($);
     let results = Parser.dataParser($);
 
@@ -114,6 +118,7 @@ let crawlAndInsert = async function (params, options) {
  */
 let start = async function () {
   try {
+    console.log('start crawl baidu news.');
     let keyer = await Keyer.getKey();
     if (keyer) {
       console.log(keyer.date);

@@ -2,7 +2,9 @@ const rp = require('request-promise');
 const cheerio = require('cheerio');
 const moment = require('moment');
 
-import { Config } from '../config.js';
+import {
+  Config
+} from '../config.js';
 
 
 /**
@@ -59,9 +61,10 @@ const countParser = async function ($, time = 0) {
     if (count !== count) {
       console.log('--------------------error count---------------------------');
       console.log(count);
-      console.log('休息', 60, 's重新开始。');
+      console.log('页面抓取错误，需要重新抓取。');
+      console.log('休息', 60, 's重新抓取。');
       await Config.timestop(60);
-      return countParser($, ++time);
+      return -1;
     }
     return count;
   } catch (error) {
@@ -182,4 +185,6 @@ const parser = {
   moreParser
 }
 
-export { parser as Parser };
+export {
+  parser as Parser
+};
