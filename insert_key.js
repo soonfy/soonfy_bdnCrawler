@@ -23,11 +23,20 @@ const start_nhj = async() => {
     let nhj = '../source/nhj.xlsx';
     let nhj_id = '../source/nhj-ids.xlsx';
     nhj = filer.read(path.join(__dirname, nhj));
-    // console.log(nhj);
+    console.log(nhj);
     let resp = [];
     for (let name in nhj) {
       // console.log(name);
       let lines = nhj[name];
+      let _line = lines[1].slice(1);
+      lines = lines.map(x => {
+        if (x.length === 1) {
+          return _line.map(xx => xx.replace('北京', x[0]));
+        } else {
+          return x;
+        }
+      })
+      // console.log(lines);
       lines.shift();
       let promises = lines.map(async(line) => {
         let words = line.slice(1);
@@ -126,5 +135,34 @@ const start_yyh = async() => {
   }
 }
 
+/**
+ *
+ *  移除错误
+ *
+ */
+const remove = async() => {
+  try {
+    let nhj = '../source/质检项目ids.xlsx';
+    nhj = filer.read(path.join(__dirname, nhj));
+    console.log(nhj);
+    for (let name in nhj) {
+      // console.log(name);
+      let lines = nhj[name];
+      // console.log(lines);
+      lines.shift();
+      console.log(lines.length);
+      // let promises = lines.map(async (line) => {
+      //   let id = line[2];
+      //   await Key.remove({ _id: id });
+      // })
+      // await Promise.all(promises);
+    }
+    process.exit();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 start_nhj();
 // start_yyh();
+// remove();
