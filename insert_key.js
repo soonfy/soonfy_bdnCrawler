@@ -31,12 +31,14 @@ const start_nhj = async() => {
       let _line = lines[1].slice(1);
       lines = lines.map(x => {
         if (x.length === 1) {
-          return _line.map(xx => xx.replace('北京', x[0]));
+          let temp = _line.map(xx => xx.replace('北京', x[0]));
+          temp.unshift(x[0]);
+          return temp;
         } else {
           return x;
         }
       })
-      // console.log(lines);
+      console.log(lines);
       lines.shift();
       let promises = lines.map(async(line) => {
         let words = line.slice(1);
@@ -142,7 +144,7 @@ const start_yyh = async() => {
  */
 const remove = async() => {
   try {
-    let nhj = '../source/质检项目ids.xlsx';
+    let nhj = '../source/nhj-ids.xlsx';
     nhj = filer.read(path.join(__dirname, nhj));
     console.log(nhj);
     for (let name in nhj) {
@@ -151,11 +153,11 @@ const remove = async() => {
       // console.log(lines);
       lines.shift();
       console.log(lines.length);
-      // let promises = lines.map(async (line) => {
-      //   let id = line[2];
-      //   await Key.remove({ _id: id });
-      // })
-      // await Promise.all(promises);
+      let promises = lines.map(async (line) => {
+        let id = line[2];
+        await Key.remove({ _id: id });
+      })
+      await Promise.all(promises);
     }
     process.exit();
   } catch (error) {
