@@ -21,7 +21,7 @@ const start = async(filmid, filmname, keys, date) => {
         updatedAt: temp_date - 1000 * 60 * 60 * 24,
         start: temp_date - 1000 * 60 * 60 * 24,
         createdAt: new Date(),
-        title: `${filmid}-${filmname}`,
+        title: `${filmid}:${filmname}`,
         isCrawled: 0,
         q1: '',
         tn: 'newsdy',

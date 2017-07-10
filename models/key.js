@@ -6,6 +6,9 @@ const KeySchema = new Schema({
     type: String,
     index: true
   },
+  title: {
+    type: String,
+  },
   tn: { //newsdy-全文，newstitledy-标题
     type: String,
     default: 'newsdy'
