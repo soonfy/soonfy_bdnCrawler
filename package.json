@@ -2,7 +2,7 @@
   "name": "baidu_news_crawler",
   "version": "0.0.1",
   "description": "crawl news data from baidu news",
-  "main": "interfaces/insert_key.js",
+  "main": "app/interfaces/insert_key.js",
   "scripts": {
     "start": "node app/index.js",
     "test": "node app/init.js",
