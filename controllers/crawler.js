@@ -9,6 +9,9 @@ import {
 import {
   Key
 } from '../models/key.js';
+import {
+  Count
+} from '../models/count.js';
 
 import {
   Parser
@@ -48,6 +51,22 @@ let crawlAndInsert = async function (params, options) {
       $ = await Parser.getData(param);
       count = await Parser.countParser($);
     }
+    if (options.date) {
+      await Count.findOneAndUpdate({
+        key_id: _id,
+        date: new Date(options.date)
+      }, {
+        $set: {
+          key_id: _id,
+          date: new Date(options.date),
+          count,
+          createdAt: new Date()
+        }
+      }, {
+        upsert: true,
+        new: true
+      })
+    }
     let pages = Parser.moreParser($);
     let results = Parser.dataParser($);
 
@@ -70,20 +89,20 @@ let crawlAndInsert = async function (params, options) {
       return result
     })
     console.log(results);
-    results = JSON.stringify(results);
-    const opts = {
-      hostname: Config.esUrl.trim(),
-      path: '/stq/api/v1/pa/baidu/add',
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        'Content-Length': Buffer.byteLength(results)
-      }
-    };
-    const req = http.request(opts, (res) => {
-      console.log(res.statusCode);
-    });
-    req.write(results);
+    // results = JSON.stringify(results);
+    // const opts = {
+    //   hostname: Config.esUrl.trim(),
+    //   path: '/stq/api/v1/pa/baidu/add',
+    //   method: 'POST',
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     'Content-Length': Buffer.byteLength(results)
+    //   }
+    // };
+    // const req = http.request(opts, (res) => {
+    //   console.log(res.statusCode);
+    // });
+    // req.write(results);
     // 相同新闻
     console.log(pages);
     for (let page of pages) {
@@ -91,7 +110,9 @@ let crawlAndInsert = async function (params, options) {
       await crawlAndInsert({
         _id,
         param
-      }, options);
+      }, {
+        key
+      });
     }
     // 下一页
     let next = Parser.pageParser($);
@@ -101,7 +122,9 @@ let crawlAndInsert = async function (params, options) {
       await crawlAndInsert({
         _id,
         param
-      }, options);
+      }, {
+        key
+      });
     } else {
       console.log(_id, param, 'parse over.');
     }
@@ -121,31 +144,34 @@ let start = async function () {
     console.log('start crawl baidu news.');
     let keyer = await Keyer.getKey();
     if (keyer) {
-      console.log(keyer.date);
-      let params = ParamsParser.parse(keyer);
-      let urls = [];
-      for (let key in params) {
-        urls.push([key, params[key]].join('='))
+      for (let date of keyer.dates) {
+        keyer.date = date;
+        console.log(keyer.date);
+        let params = ParamsParser.parse(keyer);
+        let urls = [];
+        for (let key in params) {
+          urls.push([key, params[key]].join('='))
+        }
+        let param = urls.join('&');
+        param = ['/ns', param].join('?');
+        let _id = keyer.key._id + ''
+        let options = {
+          key: keyer.key.key,
+          date: keyer.date.end_date,
+        }
+        await crawlAndInsert({
+          _id,
+          param,
+        }, options);
       }
-      let param = urls.join('&');
-      param = ['/ns', param].join('?');
-      let _id = keyer.key._id + ''
       let dated = keyer.date.end_date
-      let options = {
-        key: keyer.key.key
-      }
-      await crawlAndInsert({
-        _id,
-        param
-      }, options);
       await Key.findOneAndUpdate({
-        _id: _id,
+        _id: keyer.key._id,
         isCrawled: 1
       }, {
         isCrawled: 0,
         updatedAt: new Date(moment(dated).add(1, 'days'))
       }, {});
-
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
@@ -161,13 +187,6 @@ let start = async function () {
       await start();
     }
   } catch (error) {
-    await Key.findOneAndUpdate({
-      _id: _id,
-      isCrawled: 1
-    }, {
-      isCrawled: 2,
-      updatedAt: new Date(dated)
-    }, {});
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!! error!!!!!!!!!!!!!!!!!!!!!!!!!!');

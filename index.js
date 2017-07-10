@@ -8,12 +8,8 @@ import {
 } from './controllers/crawler.js';
 
 console.log(process.argv);
-if (process.argv.length < 4) {
-  console.error(`缺少参数。`);
-  process.exit();
-} else if (process.argv[3].trim().length < 10) {
-  console.error(`es 地址不正确。`);
-  process.exit();
+if (process.argv.length < 3) {
+  console.error(`缺少参数。mongo, es 参数，使用配置文件`);
 }
 
 console.log('mongodb url', Config.dbUrl);

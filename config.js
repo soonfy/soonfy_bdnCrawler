@@ -4,8 +4,8 @@
 // const elasticsearch = require('elasticsearch');
 
 const config = {
-  dbUrl: process.argv[2] || '',
-  esUrl: process.argv[3] || '',
+  dbUrl: process.argv[2] || require('../config.json').db.uris,
+  esUrl: process.argv[3] || require('../config.json').es.hosts,
   host: 'http://news.baidu.com',
   headers: {
     'Host': 'news.baidu.com',
