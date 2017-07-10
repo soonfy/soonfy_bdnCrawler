@@ -6,3 +6,8 @@
   
   2. init  
   node app/init.js mongo\_url  
+
+## interfaces
+  1. insert
+  > filmid, filmname, keys, date
+  
