@@ -89,20 +89,20 @@ let crawlAndInsert = async function (params, options) {
       return result
     })
     console.log(results);
-    // results = JSON.stringify(results);
-    // const opts = {
-    //   hostname: Config.esUrl.trim(),
-    //   path: '/stq/api/v1/pa/baidu/add',
-    //   method: 'POST',
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     'Content-Length': Buffer.byteLength(results)
-    //   }
-    // };
-    // const req = http.request(opts, (res) => {
-    //   console.log(res.statusCode);
-    // });
-    // req.write(results);
+    results = JSON.stringify(results);
+    const opts = {
+      hostname: Config.esUrl.trim(),
+      path: '/stq/api/v1/pa/baidu/add',
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        'Content-Length': Buffer.byteLength(results)
+      }
+    };
+    const req = http.request(opts, (res) => {
+      console.log(res.statusCode);
+    });
+    req.write(results);
     // 相同新闻
     console.log(pages);
     for (let page of pages) {
@@ -183,7 +183,7 @@ let start = async function () {
       console.log('==============stop===============');
       console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
       console.log('所有关键词都已更新，10分钟后重新开始更新....');
-      await Config.timestop(60 * 10);
+      // await Config.timestop(60 * 10);
       await start();
     }
   } catch (error) {
