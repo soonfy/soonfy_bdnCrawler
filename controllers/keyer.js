@@ -31,7 +31,7 @@ let getKey = async function () {
       // 每天采集一次
       // let begin_date = moment(key.updatedAt).format('YYYY-MM-DD');
       // let end_date = moment(key.updatedAt).format('YYYY-MM-DD');
-      let offsets = 1,
+      let offsets = 3,
         dates = [];
       while (0 < offsets) {
         let temp_date = moment(moment(key.updatedAt).subtract(offsets - 1, 'days')).format('YYYY-MM-DD');

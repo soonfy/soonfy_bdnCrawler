@@ -183,7 +183,7 @@ let start = async function () {
       console.log('==============stop===============');
       console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
       console.log('所有关键词都已更新，10分钟后重新开始更新....');
-      // await Config.timestop(60 * 10);
+      await Config.timestop(60 * 10);
       await start();
     }
   } catch (error) {
