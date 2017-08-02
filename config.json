@@ -1,8 +1,0 @@
-{
-  "db":{
-    "uris": "mongodb://news:joke123@101.201.37.28:3717/baidu_news"
-  },
-  "es":{
-    "hosts": "59.110.52.213"
-  }
-}
