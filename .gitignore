@@ -2,6 +2,7 @@
 /npm-debug.log
 /app/
 /source/
+/result/
 /logs/
 demo.js
 .DS_Store
