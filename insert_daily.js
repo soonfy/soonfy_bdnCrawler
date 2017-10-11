@@ -21,7 +21,7 @@ const start = async() => {
       keys = [];
     source = path.join(__dirname, source);
     let lines = filer.read(source);
-    lines = lines['Sheet1'];
+    lines = lines['关键词'];
     console.log(lines);
     lines.shift();
     for (let line of lines) {
@@ -61,8 +61,8 @@ const start = async() => {
         })
       }
     }
-    filer.write(path.join(__dirname, result), keys);
     console.log(keys);
+    filer.write(path.join(__dirname, result), keys);
     console.log(`all keys insert over.`);
     process.exit();
   } catch (error) {
