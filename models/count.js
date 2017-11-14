@@ -12,7 +12,9 @@ const CountSchema = new Schema({
   count: {
     type: Number,
   },
-  createdAt: Date //创建时间
+  create_at: {
+    type: Date,
+  },
 })
 
 //测试

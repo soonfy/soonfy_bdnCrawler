@@ -10,13 +10,13 @@
     "experimentalDecorators": true,
     "declaration": false,
     "inlineSourceMap": false,
-    "outDir": "./app",
+    "outDir": "./main",
     "allowJs": true,
     "jsx": "preserve"
   },
   "exclude": [
     "node_modules",
-    "app",
+    "main",
     "*.json",
     "*.md"
   ]

@@ -20,7 +20,7 @@ const getData = async function (param, time = 1) {
       return {};
     }
     let url = Config.host + param;
-    console.log('now is parse', url);
+    // console.log('now is parse', url);
     let options = {
       url,
       timeout: Config.timeout,
@@ -30,13 +30,11 @@ const getData = async function (param, time = 1) {
       }
     }
     let $ = await rp(options);
-    // console.log($);
-    // $ = cheerio.load($);
     return $;
   } catch (error) {
-    console.log(error);
-    console.log(param, '第', time, '次采集出错。');
-    console.log('休息', time, 's重新开始。');
+    console.error(error);
+    console.error(param, '第', time, '次采集出错。');
+    console.error('休息', time, 's重新开始。');
     await Config.timestop(time++);
     return await getData(param, time++);
   }
@@ -59,18 +57,18 @@ const countParser = async function ($, time = 0) {
       return 0;
     }
     if (count !== count) {
-      console.log('--------------------error count---------------------------');
-      console.log(count);
-      console.log('页面抓取错误，需要重新抓取。');
-      console.log('休息', 60, 's重新抓取。');
+      console.error('--------------------error count---------------------------');
+      console.error(count);
+      console.error('页面抓取错误，需要重新抓取。');
+      console.error('休息', 60, 's重新抓取。');
       await Config.timestop(60);
       return -1;
     }
     return count;
   } catch (error) {
-    console.log(error);
-    console.log('第', time, '次采集出错。');
-    console.log('休息', 60, 's重新开始。');
+    console.error(error);
+    console.error('第', time, '次采集出错。');
+    console.error('休息', 60, 's重新开始。');
     await Config.timestop(60);
     return countParser($, time);
   }
@@ -126,9 +124,9 @@ const dataParser = function ($, time) {
     }
     return results;
   } catch (error) {
-    console.log(error);
-    console.log('第', time, '次采集出错。');
-    console.log('休息', time, 's重新开始。');
+    console.error(error);
+    console.error('第', time, '次采集出错。');
+    console.error('休息', time, 's重新开始。');
     return dataParser($, time++);
   }
 };
@@ -144,9 +142,9 @@ const moreParser = ($, time) => {
     })
     return pages;
   } catch (error) {
-    console.log(error);
-    console.log('第', time, '次采集出错。');
-    console.log('休息', time, 's重新开始。');
+    console.error(error);
+    console.error('第', time, '次采集出错。');
+    console.error('休息', time, 's重新开始。');
     return moreParser($, time++);
   }
 }
@@ -170,9 +168,9 @@ const pageParser = function ($, time) {
     })
     return next;
   } catch (error) {
-    console.log(error);
-    console.log('第', time, '次采集出错。');
-    console.log('休息', time, 's重新开始。');
+    console.error(error);
+    console.error('第', time, '次采集出错。');
+    console.error('休息', time, 's重新开始。');
     return dataParser($, time++);
   }
 };

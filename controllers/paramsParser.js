@@ -79,13 +79,12 @@ const paramsParser = {
    * @returns
    */
   parse: function (params) {
-    let {key, date} = params;
-    let {q1, q3, q4, q6, from, cl, submit, tn, s, mt, lm, ct, ct1, rn} = key;
+    let { q1, q3, q4, q6, from, cl, submit, tn, s, mt, lm, ct, ct1, rn, date } = params;
     q1 = q1 ? q1.split(' ').join('+') : q1;
     q3 = q3 ? q3.split(' ').join('+') : q3;
     q4 = q4 ? q4.split(' ').join('+') : q4;
-    let {begin_date, end_date} = date;
-    if(!q1 && !q3){
+    let { begin_date, end_date } = date;
+    if (!q1 && !q3) {
       console.error("请填写关键词！");
       return;
     }
@@ -111,12 +110,12 @@ const paramsParser = {
     from = from ? from : 'news';
     cl = cl ? cl : 2;
     submit = submit ? submit : '%B0%D9%B6%C8%D2%BB%CF%C2';
-    s = s ? s : 2;
     tn = tn ? tn : 'newsdy';
+    s = s ? s : 2;
     mt = mt ? mt : 0;
     lm = lm ? lm : '';
-    ct1 = ct1 ? ct1 : 1;
     ct = ct ? ct : 1;
+    ct1 = ct1 ? ct1 : 1;
     rn = rn ? rn : 50;
 
     let bd = begin_date.split("-");
@@ -137,9 +136,9 @@ const paramsParser = {
       let estd = (this.dataCompare('1970-01-01', end_date));
       et = estd - 28800 + 86399;
     }
-    let all_params = {from, cl, bt, y0, m0, d0, y1, m1, d1, et, q1, submit, q3, q4, mt, lm, s, begin_date, end_date, tn, ct, ct1, rn, q6}
+    let all_params = { from, cl, bt, y0, m0, d0, y1, m1, d1, et, q1, submit, q3, q4, mt, lm, s, begin_date, end_date, tn, ct, ct1, rn, q6 }
     return all_params;
   }
 }
 
-export {paramsParser as ParamsParser}
+export { paramsParser as ParamsParser }

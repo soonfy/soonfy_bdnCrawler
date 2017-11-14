@@ -1,6 +1,5 @@
 const moment = require('moment');
-// const elasticsearch = require('elasticsearch');
-const http = require('http');
+const rp = require('request-promise');
 
 import {
   Config
@@ -20,114 +19,37 @@ import {
   ParamsParser
 } from './paramsParser.js';
 import {
-  Keyer
+  Keyer,
 } from './keyer.js';
 
-// const client = new elasticsearch.Client({
-//   hosts: [
-//     Config.esUrl
-//   ]
-// });
-
-
-/**
- * crawl news from url param, and crawl pages, update by _id
- * @method crawl
- * @param {any} params - contains _id and url param
- * @return 
- */
-let crawlAndInsert = async function (params, options) {
+let crawl = async function (param) {
   try {
-    let {
-      _id,
-      param
-    } = params;
-    let {
-      key
-    } = options;
     let $ = await Parser.getData(param);
     let count = await Parser.countParser($);
+    // console.log(count);
     while (count === -1) {
       $ = await Parser.getData(param);
       count = await Parser.countParser($);
+      // console.log(count);
     }
-    if (options.date) {
-      await Count.findOneAndUpdate({
-        key_id: _id,
-        date: new Date(options.date)
-      }, {
-        $set: {
-          key_id: _id,
-          date: new Date(options.date),
-          count,
-          createdAt: new Date()
-        }
-      }, {
-        upsert: true,
-        new: true
-      })
-    }
-    let pages = Parser.moreParser($);
-    let results = Parser.dataParser($);
-
-    console.log('储存 es 数据数量', results.length);
-    // let promises = results.map(result => {
-    //   let id = [_id, result.url].join('').replace(/[^\w\d]/g, '');
-    //   result.createdAt = new Date();
-    //   result.keyId = _id;
-    //   // console.log(id);
-    //   // console.log(result);
-    //   return Config.esInsert(client, id, result)
-    // })
-    // await Promise.all(promises);
-    results = results.map(result => {
-      result.id = [_id, result.url].join('').replace(/[^\w\d]/g, '');
-      result.keyId = _id;
-      result.index_name = 'baidunews_news';
-      result.type_name = 'baidunews_news';
-      result.createdAt = new Date();
-      return result
-    })
-    console.log(results);
-    results = JSON.stringify(results);
-    const opts = {
-      hostname: Config.esUrl.trim(),
-      path: '/stq/api/v1/pa/baidu/add',
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        'Content-Length': Buffer.byteLength(results)
-      }
-    };
-    const req = http.request(opts, (res) => {
-      console.log(res.statusCode);
-    });
-    req.write(results);
-    // 相同新闻
-    console.log(pages);
+    let pages = Parser.moreParser($) || [];
+    let docs = Parser.dataParser($) || [];
+    // console.log(docs.length);
     for (let page of pages) {
+      // console.log(page);
       let param = page;
-      await crawlAndInsert({
-        _id,
-        param
-      }, {
-        key
-      });
+      docs = docs.concat((await crawl(param)).docs);
     }
     // 下一页
     let next = Parser.pageParser($);
     if (next) {
-      console.log(next);
+      // console.log(next);
       let param = next;
-      await crawlAndInsert({
-        _id,
-        param
-      }, {
-        key
-      });
+      docs = docs.concat((await crawl(param)).docs);
     } else {
-      console.log(_id, param, 'parse over.');
+      console.log(param, 'parse over.');
     }
+    return { count, docs };
   } catch (error) {
     console.error(error);
   }
@@ -144,45 +66,63 @@ let start = async function () {
     console.log('start crawl baidu news.');
     let keyer = await Keyer.getKey();
     if (keyer) {
-      for (let date of keyer.dates) {
-        keyer.date = date;
-        console.log(keyer.date);
-        let params = ParamsParser.parse(keyer);
-        let urls = [];
-        for (let key in params) {
-          urls.push([key, params[key]].join('='))
+      console.log('关键词');
+      console.log(keyer);
+      let { key_id, keys, word, date } = keyer;
+      for (let _date of keyer.dates) {
+        let c_date = _date.end_date, c_count = 0, c_docs = [];
+        for (let _keyer of keys) {
+          _keyer.date = _date;
+          let params = ParamsParser.parse(_keyer);
+          let urls = [];
+          for (let key in params) {
+            urls.push([key, params[key]].join('='))
+          }
+          let param = urls.join('&');
+          param = ['/ns', param].join('?');
+          let { count, docs } = await crawl(param);
+          c_count += count;
+          c_docs = c_docs.concat(docs);
         }
-        let param = urls.join('&');
-        param = ['/ns', param].join('?');
-        let _id = keyer.key._id + ''
-        let options = {
-          key: keyer.key.key,
-          date: keyer.date.end_date,
-        }
-        await crawlAndInsert({
-          _id,
-          param,
-        }, options);
+        let _count = await Count.findOneAndUpdate({ key_id, date: c_date }, { $set: { key_id, date: c_date, count: c_count, create_at: new Date() } }, { new: true, upsert: true });
+        console.log('储存 mongo db 数值', _count);
+        c_docs = c_docs.map(result => {
+          result.id = [key_id, result.url].join('').replace(/[^\w\d]/g, '');
+          result.keyId = key_id;
+          result.index_name = 'baidunews_news';
+          result.type_name = 'baidunews_news';
+          result.createdAt = new Date();
+          return result
+        })
+        console.log('储存 es 数据数量', c_docs.length);
+        var options = {
+          method: 'POST',
+          uri: 'http://' + Config.esUrl.trim() + '/stq/api/v1/pa/baidu/add',
+          body: c_docs,
+          json: true
+        };
+        let res = await rp(options);
+        console.log('es 返回结果', res);
       }
-      let dated = keyer.date.end_date
-      await Key.findOneAndUpdate({
-        _id: keyer.key._id,
-        isCrawled: 1
-      }, {
-        isCrawled: 0,
-        updatedAt: new Date(moment(dated).add(1, 'days'))
-      }, {});
+
+      console.log(`${word} from ${date.begin_date} to ${date.end_date} crawl over...`);
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
       console.log('==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>');
-      console.log('开始下一次采集...');
+      console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
+      let status = await Keyer.update_last(key_id, moment(date.end_date).endOf('day'));
+      if (status) {
+        console.log('关键词状态更新成功。');
+      } else {
+        console.log('关键词状态更新失败。');
+      }
       await start();
     } else {
       console.log('==============stop===============');
       console.log('==============stop===============');
       console.log('==============stop===============');
       console.log(moment().format('YYYY-MM-DD HH:mm:ss'));
-      console.log('所有关键词都已更新，10分钟后重新开始更新....');
+      console.log('所有关键词都已更新，10分钟后重新开始更新...');
       await Config.timestop(60 * 10);
       await start();
     }

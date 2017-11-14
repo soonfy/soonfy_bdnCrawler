@@ -1,55 +1,43 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const KeySchema = new Schema({
-  key: { // keys-西游 伏妖 (周星驰 | 徐克) -(西游降魔 | 大闹天宫)
-    type: String,
-    index: true
-  },
-  title: {
+const KeywordSchema = new Schema({
+  keyword: {
+    // 关键词词包
     type: String,
   },
-  tn: { //newsdy-全文，newstitledy-标题
+  from_id: {
+    // 来源id
     type: String,
-    default: 'newsdy'
   },
-  q1: { //and，关键词之间+
-    type: String,
-    default: ''
+  start_date: {
+    // 开始监测时间, 00:00:00
+    type: Date,
   },
-  q3: { //or，关键词之间+
-    type: String,
-    default: ''
+  end_date: {
+    // 结束监测时间, 23:59:59
+    type: Date,
   },
-  q4: { //not，关键词之间+
-    type: String,
-    default: ''
+  create_at: {
+    // 任务创建时间
+    type: Date,
   },
-  q6: { //限定新闻来源
-    type: String,
-    default: ''
-  },
-  s: { //1-全部时间，2-限定时间
+  crawl_status: {
+    // 关键词采集状态
+    // -1 - 删除， 0 - 正常， 1 - 正在采集， 2 - 数据完成
     type: Number,
-    default: 2
   },
-  isCrawled: { //0-等待采集，1-正在采集, 2-采集出错，3-删除需求
-    type: Number,
-    default: 0
+  last_crawl_at: {
+    // 任务最新采集时间, 23:59:59
+    type: Date,
   },
-  start: Date, //起始时间
-  updatedAt: Date, //已更新时间
-  createdAt: Date //创建时间
+  crawling_at: {
+    // 任务正在采集
+    type: Date,
+  },
 })
 
-KeySchema.index({
-  _id: 1,
-  isCrawled: 1
-});
-
 //测试
-const KeyModel = mongoose.model('baidunews_keywords', KeySchema);
+const KeywordModel = mongoose.model('BAIDUNEWS_KEYWORDS', KeywordSchema, 'baidunews_keywords');
 
-export {
-  KeyModel as Key
-}
+module.exports = KeywordModel
