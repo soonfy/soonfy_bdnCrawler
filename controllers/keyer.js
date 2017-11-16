@@ -20,7 +20,7 @@ let getKey = async function () {
         new: true,
       });
     key = await Key.findOneAndUpdate({
-      crawl_status: { $in: [0, 1] },
+      crawl_status: 0,
       last_crawl_at: { $lte: new Date() },
     }, {
         $set: {

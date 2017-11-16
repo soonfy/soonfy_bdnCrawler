@@ -38,6 +38,6 @@ const KeywordSchema = new Schema({
 })
 
 //测试
-const KeywordModel = mongoose.model('BAIDUNEWS_KEYWORDS', KeywordSchema, 'baidunews_keywords');
+const KeywordModel = mongoose.model('BAIDUNEWS_KEYWORDS', KeywordSchema, 'dev_baidunews_keywords');
 
 module.exports = KeywordModel

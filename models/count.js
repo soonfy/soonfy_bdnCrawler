@@ -18,7 +18,7 @@ const CountSchema = new Schema({
 })
 
 //测试
-const CountModel = mongoose.model('baidunews_counts', CountSchema);
+const CountModel = mongoose.model('dev_baidunews_counts', CountSchema);
 
 export {
   CountModel as Count

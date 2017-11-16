@@ -16,6 +16,6 @@ import mongo from './mongo';
 
 console.log(Config);
 
-// mongo(Config.dbUrl);
+mongo(Config.dbUrl);
 // mongo('mongodb://localhost/baidu');
 Crawler.start();
