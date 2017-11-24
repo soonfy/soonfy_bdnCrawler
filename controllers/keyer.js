@@ -107,6 +107,7 @@ let getKey = async function () {
 
 let update_last = async (key_id, last_crawl_at) => {
   try {
+    console.log(last_crawl_at);
     let _key = await Key.findOneAndUpdate({ _id: key_id, crawl_status: 1 }, { $set: { crawl_status: 0, last_crawl_at: last_crawl_at } }, { new: true });
     if (_key && _key.end_date) {
       _key = await Key.findOneAndUpdate({ _id: key_id }, { $set: { crawl_status: 2 } }, { new: true });
