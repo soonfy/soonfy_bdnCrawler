@@ -84,11 +84,11 @@ let start = async function () {
           c_count += count;
           c_docs = c_docs.concat(docs);
         }
-        let _count = await Count.findOneAndUpdate({ key_id, date: c_date }, { $set: { key_id, date: c_date, count: c_count, create_at: new Date() } }, { new: true, upsert: true });
+        let _count = await Count.findOneAndUpdate({ keyword: word, date: c_date }, { $set: { keyword: word, date: c_date, count: c_count, create_at: new Date() } }, { new: true, upsert: true });
         console.log('储存 mongo db 数值', _count);
         c_docs = c_docs.map(result => {
-          result.id = [key_id, result.url].join('').replace(/[^\w\d]/g, '');
-          result.keyId = key_id;
+          result.id = [word, result.url.replace(/[^\w\d]/g, '')].join(':');
+          result.keyword = word;
           result.index_name = 'baidunews_news';
           result.type_name = 'baidunews_news';
           result.createdAt = new Date();

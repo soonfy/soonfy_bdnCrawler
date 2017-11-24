@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const CountSchema = new Schema({
-  key_id: {
+  keyword: {
     type: String,
     index: true
   },
