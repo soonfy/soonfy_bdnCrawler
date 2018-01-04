@@ -15,25 +15,28 @@ let getKey = function () {
         try {
             let key = yield Key.findOneAndUpdate({
                 crawl_status: 1,
-                crawling_at: { $lt: moment().subtract(1, 'hours'), }
+                crawling_at: { $lt: moment().subtract(1, 'hours') }
             }, {
-                crawling_at: new Date(),
-            }, {
-                sort: { crawling_at: 1 },
-                new: true,
-            });
-            key = yield Key.findOneAndUpdate({
-                crawl_status: 0,
-                last_crawl_at: { $lte: new Date() },
-            }, {
-                $set: {
-                    crawl_status: 1,
-                    crawling_at: new Date(),
-                }
+                $set: { crawling_at: new Date() }
             }, {
                 sort: { crawling_at: 1 },
                 new: true,
             });
+            if (!key) {
+                key = yield Key.findOneAndUpdate({
+                    crawl_status: 0,
+                    last_crawl_at: { $lte: new Date() },
+                }, {
+                    $set: {
+                        crawl_status: 1,
+                        crawling_at: new Date(),
+                    }
+                }, {
+                    sort: { crawling_at: 1 },
+                    new: true,
+                });
+            }
+            console.log(key);
             if (key) {
                 let { from_id, keyword, start_date, end_date, last_crawl_at } = key;
                 let start_str = '', end_str = '';

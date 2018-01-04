@@ -1,8 +1,10 @@
 /node_modules/
 /npm-debug.log
+/package-lock.json
+
 /source/
 /logs/
-demo.js
-/package-lock.json
-/config.json
 /result/
+
+demo.js
+/config.json

@@ -26,5 +26,7 @@ const KeywordSchema = new Schema({
         type: Date,
     },
 });
+KeywordSchema.index({ crawl_status: 1, crawling_at: 1 });
+KeywordSchema.index({ crawl_status: 1, last_crawl_at: 1 });
 const KeywordModel = mongoose.model('BAIDUNEWS_KEYWORDS', KeywordSchema, 'dev_baidunews_keywords');
 module.exports = KeywordModel;
