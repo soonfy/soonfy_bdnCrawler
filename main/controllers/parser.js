@@ -19,15 +19,14 @@ const getData = function (param, time = 1) {
                 return {};
             }
             let url = config_js_1.Config.host + param;
+            console.log('now is parse', url);
             let options = {
                 url,
                 timeout: config_js_1.Config.timeout,
                 headers: config_js_1.Config.headers,
-                transform: function (body) {
-                    return cheerio.load(body);
-                }
             };
-            let $ = yield rp(options);
+            let body = yield rp(options);
+            let $ = cheerio.load(body);
             return $;
         }
         catch (error) {

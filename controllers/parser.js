@@ -20,16 +20,18 @@ const getData = async function (param, time = 1) {
       return {};
     }
     let url = Config.host + param;
-    // console.log('now is parse', url);
+    console.log('now is parse', url);
     let options = {
       url,
       timeout: Config.timeout,
       headers: Config.headers,
-      transform: function (body) {
-        return cheerio.load(body);
-      }
+      // transform: function (body) {
+      //   return cheerio.load(body);
+      // }
     }
-    let $ = await rp(options);
+    let body = await rp(options);
+    // console.log(body);
+    let $ = cheerio.load(body);
     return $;
   } catch (error) {
     console.error(error);
