@@ -70,7 +70,7 @@ let getKey = function () {
                     else {
                         _words.map(y => {
                             if (y.slice(0, 1) === '-') {
-                                q4 += `+${y}`;
+                                q4 += `+${y.slice(1).trim()}`;
                             }
                             else if (y.length > 0) {
                                 q1 += `+${y}`;
