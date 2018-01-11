@@ -39,6 +39,7 @@ const KeywordSchema = new Schema({
 
 KeywordSchema.index({crawl_status: 1, crawling_at: 1});
 KeywordSchema.index({crawl_status: 1, last_crawl_at: 1});
+KeywordSchema.index({crawl_status: 1, last_crawl_at: 1, create_at: -1});
 
 //测试
 const KeywordModel = mongoose.model('BAIDUNEWS_KEYWORDS', KeywordSchema, 'dev_baidunews_keywords');

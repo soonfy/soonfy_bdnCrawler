@@ -12,6 +12,7 @@ let getKey = async function () {
   try {
     let key = await Key.findOneAndUpdate({
       crawl_status: 1,
+      // crawling_at: { $lt: moment().subtract(10, 'minutes') }
       crawling_at: { $lt: moment().subtract(1, 'hours') }
     }, {
         $set: { crawling_at: new Date() }
